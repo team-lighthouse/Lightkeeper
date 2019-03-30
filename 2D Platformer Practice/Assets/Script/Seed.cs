@@ -6,6 +6,7 @@ public class Seed : MonoBehaviour
 {
     public float bulletmovePow = 10f;
     public int bulletDirection;
+    public GameObject tree;
 
     void FixedUpdate()
     {
@@ -21,12 +22,18 @@ public class Seed : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        Debug.Log("Enter");
-        Destroy(gameObject);
+        Destroy(gameObject.GetComponent<Rigidbody2D>());
         if (col.gameObject.tag == "Dirt")
         {
-            //Instantiate tree platform
-            Debug.Log("Dirt");
+            if (bulletDirection < 0)
+            {
+                Instantiate(tree,  new Vector3((col.gameObject.transform.position.x + 1.5f), transform.position.y, 0), transform.rotation);
+            }
+            else // bulletDirection >= 0
+            {
+                Instantiate(tree, new Vector3((col.gameObject.transform.position.x - 1.5f), transform.position.y, 0), transform.rotation);
+            }
         }
+        Destroy(gameObject);
     }
 }

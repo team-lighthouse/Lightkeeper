@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class Player : MonoBehaviour
 {
     public float movePower;
     public float jumpPower;
@@ -114,7 +114,10 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!Shoot)
         {
-            shootTime += Time.deltaTime;
+            if (shootTime < 0.5)
+            {
+                shootTime += Time.deltaTime;
+            }
             return;
         }
         else
