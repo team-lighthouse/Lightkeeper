@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
     public float movePower;
     public float jumpPower;
     public float jumpTimeLimit;
+    public GameObject seed;
 
     Rigidbody2D rigid;
     new SpriteRenderer renderer;
@@ -15,12 +16,15 @@ public class PlayerMovement : MonoBehaviour
     Vector3 movement;
     bool isJumping = false;
     bool onPlatform = false;
-    float jumpTime;
+    float jumpTime = 0;
+
+    bool Shoot = false;
+    float shootTime = 0.5f;
 
     void Start()
     {
-        movePower = 2f;
-        jumpPower = 200f;
+        movePower = 5f;
+        jumpPower = 450f;
         jumpTimeLimit = 0.32f;
         rigid = gameObject.GetComponent<Rigidbody2D>();
         renderer = gameObject.GetComponentInChildren<SpriteRenderer>();
@@ -47,13 +51,18 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool("OnPlatform", false);
         }
 
-        Debug.Log(onPlatform);
+        if (Input.GetButtonDown("Fire1") && shootTime >= 0.5)
+        {
+            Shoot = true;
+            shootTime = 0;
+        }
     }
 
-    private void FixedUpdate()
+    void FixedUpdate()
     {
         Move();
         Jump();
+        Shot();
     }
 
     void Move()
@@ -95,8 +104,31 @@ public class PlayerMovement : MonoBehaviour
 
             if (!Input.GetButton("Jump") || jumpTime > jumpTimeLimit)
             {
-                rigid.AddForce((-0.3f) * jumpVelocity, ForceMode2D.Force);
+                rigid.AddForce((-0.45f) * jumpVelocity, ForceMode2D.Force);
                 isJumping = false;
+            }
+        }
+    }
+
+    void Shot()
+    {
+        if (!Shoot)
+        {
+            shootTime += Time.deltaTime;
+            return;
+        }
+        else
+        {
+            Shoot = false;
+            if (renderer.flipX == true)
+            {
+                GameObject newSeed = Instantiate(seed, transform.position + (new Vector3(-0.7f, 0, 0)), transform.rotation);
+                newSeed.GetComponent<Seed>().bulletDirection = -1;
+            }
+            else // renderer.flipX == false
+            {
+                GameObject newSeed = Instantiate(seed, transform.position + (new Vector3(+0.7f, 0, 0)), transform.rotation);
+                newSeed.GetComponent<Seed>().bulletDirection = 1;
             }
         }
     }
