@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Seed : MonoBehaviour
 {
-    public float bulletmovePow = 10f;
+    public float bulletmovePow = 20f;
     public int bulletDirection;
     public GameObject tree;
 

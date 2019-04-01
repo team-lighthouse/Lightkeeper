@@ -7,7 +7,13 @@ public class Player : MonoBehaviour
     public float movePower;
     public float jumpPower;
     public float jumpTimeLimit;
+    public float jumpEndPower;
     public GameObject seed;
+
+    //for calculating max jump height (Debug)
+    float YMax;
+    float YMin;
+    //
 
     Rigidbody2D rigid;
     new SpriteRenderer renderer;
@@ -23,9 +29,16 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        movePower = 5f;
-        jumpPower = 450f;
-        jumpTimeLimit = 0.32f;
+        movePower = 6f;
+        jumpPower = 550f;
+        jumpTimeLimit = 0.3f;
+        jumpEndPower = -0.45f;
+
+        //
+        YMax = transform.position.y;
+        YMin = transform.position.y;
+        //
+
         rigid = gameObject.GetComponent<Rigidbody2D>();
         renderer = gameObject.GetComponentInChildren<SpriteRenderer>();
         animator = gameObject.GetComponentInChildren<Animator>();
@@ -34,6 +47,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        Debug.Log("onPlatform: " + onPlatform);
         animator.SetFloat("VelocityY", rigid.velocity.y);
 
         if (onPlatform)
@@ -46,7 +60,8 @@ public class Player : MonoBehaviour
                 jumpTime = 0;
             }
         }
-        else
+        
+        if (!onPlatform)
         {
             animator.SetBool("OnPlatform", false);
         }
@@ -56,6 +71,18 @@ public class Player : MonoBehaviour
             Shoot = true;
             shootTime = 0;
         }
+
+        //
+        if (transform.position.y > YMax)
+        {
+            YMax = transform.position.y;
+        }
+        if (transform.position.y < YMin)
+        {
+            YMin = transform.position.y;
+        }
+        Debug.Log("(YMax - YMin)/PlayerHeight: " + (YMax - YMin));
+        //
     }
 
     void FixedUpdate()
@@ -104,7 +131,7 @@ public class Player : MonoBehaviour
 
             if (!Input.GetButton("Jump") || jumpTime > jumpTimeLimit)
             {
-                rigid.AddForce((-0.45f) * jumpVelocity, ForceMode2D.Force);
+                rigid.AddForce((jumpEndPower) * jumpVelocity, ForceMode2D.Force);
                 isJumping = false;
             }
         }
@@ -135,14 +162,20 @@ public class Player : MonoBehaviour
             }
         }
     }
-
-    void OnTriggerStay2D(Collider2D other)
+    
+    void OnTriggerStay2D(Collider2D col)
     {
-        onPlatform = true;
+        if (col.gameObject.layer == 8) // layer 8: platform
+        {
+            onPlatform = true;
+        }
     }
 
-    void OnTriggerExit2D(Collider2D other)
+    void OnTriggerExit2D(Collider2D col)
     {
-        onPlatform = false;
+        if (col.gameObject.layer == 8) // layer 8: platform
+        {
+            onPlatform = false;
+        }
     }
 }

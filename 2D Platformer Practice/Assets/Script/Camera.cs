@@ -8,9 +8,9 @@ public class Camera : MonoBehaviour
     
     void LateUpdate()
     {
-        if (player.transform.position.y > 0)
+        //if (player.transform.position.y > 0)
         {
-            transform.position = new Vector3(0, player.transform.position.y, -10);
+            transform.position = new Vector3(player.transform.position.x, player.transform.position.y, -10);
         }
     }
 }

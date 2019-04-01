@@ -94,7 +94,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b1828a9d7c73134bbad02debe7079a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletmovePow: 10
+  bulletmovePow: 20
   bulletDirection: 0
   tree: {fileID: 7707345196317828665, guid: 2d60832b0553301409d11a097299ea8e, type: 3}
 --- !u!50 &8578333805556496568
