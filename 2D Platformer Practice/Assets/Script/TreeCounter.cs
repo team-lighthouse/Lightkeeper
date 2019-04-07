@@ -14,7 +14,7 @@ public class TreeCounter : MonoBehaviour
     
     void Update()
     {
-        if (trees.Count > 3)
+        if (trees.Count > treeLimit)
         {
             Destroy(trees.Dequeue());
         }

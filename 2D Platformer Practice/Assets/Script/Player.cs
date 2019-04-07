@@ -6,7 +6,8 @@ public class Player : MonoBehaviour
 {
     public float movePower;
     public float jumpPower;
-    public float jumpTimeLimit;
+    public float jumpTimeMax;
+    public float jumpTimeMin;
     public float jumpEndPower;
     public GameObject seed;
 
@@ -22,16 +23,18 @@ public class Player : MonoBehaviour
     Vector3 movement;
     bool isJumping = false;
     bool onPlatform = false;
-    float jumpTime = 0;
+    float jumpTime = 0.9f;
+    bool jumpMin = false;
 
     bool Shoot = false;
     float shootTime = 0.5f;
 
     void Start()
     {
-        movePower = 6f;
-        jumpPower = 550f;
-        jumpTimeLimit = 0.3f;
+        movePower = 10f;
+        jumpPower = 1000f;
+        jumpTimeMax = 0.8f;
+        jumpTimeMin = 0.4f;
         jumpEndPower = -0.45f;
 
         //
@@ -47,7 +50,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("onPlatform: " + onPlatform);
+        //Debug.Log("onPlatform: " + onPlatform);
         animator.SetFloat("VelocityY", rigid.velocity.y);
 
         if (onPlatform)
@@ -57,6 +60,7 @@ public class Player : MonoBehaviour
             if (Input.GetButtonDown("Jump"))
             {
                 isJumping = true;
+                jumpMin = false;
                 jumpTime = 0;
             }
         }
@@ -81,7 +85,7 @@ public class Player : MonoBehaviour
         {
             YMin = transform.position.y;
         }
-        Debug.Log("(YMax - YMin)/PlayerHeight: " + (YMax - YMin));
+        //Debug.Log("(YMax - YMin)/PlayerHeight: " + (YMax - YMin)/2);
         //
     }
 
@@ -116,22 +120,44 @@ public class Player : MonoBehaviour
 
     void Jump()
     {
-        if (!isJumping)
+        Vector2 jumpVelocity = new Vector2(0, jumpPower);
+        jumpTime += Time.deltaTime;
+
+        if (jumpMin && (jumpTime > jumpTimeMin))
+        {
+            jumpMin = false;
+            rigid.AddForce((jumpEndPower) * jumpVelocity, ForceMode2D.Force);
+            Debug.Log("-min");
+            return;
+        }
+        if (!isJumping && (jumpTime > jumpTimeMin))
         {
             return;
         }
         else
         {
             rigid.velocity = Vector2.zero;
-
-            Vector2 jumpVelocity = new Vector2(0, jumpPower);
             
             rigid.AddForce(jumpVelocity, ForceMode2D.Force);
-            jumpTime += Time.deltaTime;
 
-            if (!Input.GetButton("Jump") || jumpTime > jumpTimeLimit)
+            if (jumpTime > jumpTimeMax)
             {
                 rigid.AddForce((jumpEndPower) * jumpVelocity, ForceMode2D.Force);
+                Debug.Log("-max");
+                isJumping = false;
+                return;
+            }
+            if (!Input.GetButton("Jump"))
+            {   
+                if (jumpTime < jumpTimeMin)
+                {
+                    jumpMin = true;
+                }
+                else
+                {
+                    rigid.AddForce((jumpEndPower) * jumpVelocity, ForceMode2D.Force);
+                    Debug.Log("-timing");
+                }
                 isJumping = false;
             }
         }
@@ -152,12 +178,12 @@ public class Player : MonoBehaviour
             Shoot = false;
             if (renderer.flipX == true)
             {
-                GameObject newSeed = Instantiate(seed, transform.position + (new Vector3(-0.7f, 0, 0)), transform.rotation);
+                GameObject newSeed = Instantiate(seed, transform.position + (new Vector3(-1.4f, -0.25f, 0)), transform.rotation);
                 newSeed.GetComponent<Seed>().bulletDirection = -1;
             }
             else // renderer.flipX == false
             {
-                GameObject newSeed = Instantiate(seed, transform.position + (new Vector3(+0.7f, 0, 0)), transform.rotation);
+                GameObject newSeed = Instantiate(seed, transform.position + (new Vector3(+1.4f, -0.25f, 0)), transform.rotation);
                 newSeed.GetComponent<Seed>().bulletDirection = 1;
             }
         }

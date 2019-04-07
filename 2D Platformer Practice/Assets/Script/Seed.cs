@@ -4,9 +4,15 @@ using UnityEngine;
 
 public class Seed : MonoBehaviour
 {
-    public float bulletmovePow = 20f;
+    public float bulletmovePow = 40f;
     public int bulletDirection;
     public GameObject tree;
+    GameObject player;
+
+    void Start()
+    {
+        player = GameObject.Find("Player");
+    }
 
     void FixedUpdate()
     {
@@ -14,7 +20,7 @@ public class Seed : MonoBehaviour
 
         transform.position += moveVelocity * bulletmovePow * Time.deltaTime;
 
-        if (transform.position.x < -10 || transform.position.x > 10)
+        if (transform.position.x < player.transform.position.x-25 || transform.position.x > player.transform.position.x + 25)
         {
             Destroy(gameObject);
         }
