@@ -5,16 +5,17 @@ using UnityEngine.Tilemaps;
 
 public class Seed : MonoBehaviour
 {
-    public float bulletmovePow = 30f;
+    public float bulletmovePow;
     public int bulletDirection;
     public GameObject tree;
-    public Tilemap tilemap_dirt;
 
+    Tilemap tilemap_dirt;
     GameObject player;
     Grid mapgrid;
 
     void Start()
     {
+        bulletmovePow = 30f;
         player = GameObject.Find("Player");
         tilemap_dirt = GameObject.Find("wall_dirt").GetComponent<Tilemap>();
         mapgrid = GameObject.Find("MapGrid").GetComponent<Grid>();
@@ -36,38 +37,28 @@ public class Seed : MonoBehaviour
     void OnTriggerEnter2D(Collider2D col)
     {
         Destroy(gameObject.GetComponent<Rigidbody2D>());
-        /*
-        if (col.gameObject.tag == "Dirt")
+
+        if (col.CompareTag("Dirt"))
         {
-            if (bulletDirection < 0)
+            Vector3 dirtOnTrigger = gameObject.transform.position;
+
+            Vector3Int tileOnTrigger = tilemap_dirt.WorldToCell(dirtOnTrigger);
+
+            if (!tilemap_dirt.HasTile(tileOnTrigger))
             {
-                Instantiate(tree, new Vector3((col.gameObject.transform.position.x + 1.5f), transform.position.y, 0), transform.rotation);
+                tileOnTrigger = tileOnTrigger + Vector3Int.right * bulletDirection;
+                Debug.Log("dl");
             }
-            else // bulletDirection >= 0
+            else if (tilemap_dirt.HasTile(tileOnTrigger + Vector3Int.left * bulletDirection))
             {
-                Instantiate(tree, new Vector3((col.gameObject.transform.position.x - 1.5f), transform.position.y, 0), transform.rotation);
+                tileOnTrigger = tileOnTrigger + Vector3Int.left * bulletDirection;
+                Debug.Log("dd");
             }
-        }
-        */
-        Vector3 triggerAdjust = Vector3.right * 0.25f;
 
-        if (bulletDirection < 0)
-        {
-             triggerAdjust = Vector3.left * 0.25f;
-        }
+            Vector3 tileCenter = mapgrid.GetCellCenterWorld(tileOnTrigger);
 
-        Vector3 dirtOnTrigger = gameObject.transform.position + triggerAdjust;
+            Instantiate(tree, new Vector3((tileCenter.x - 2.5f * bulletDirection), transform.position.y, 0), transform.rotation);
 
-        Vector3Int tileOnTrigger = tilemap_dirt.WorldToCell(dirtOnTrigger);
-        Vector3 tileCenter = mapgrid.GetCellCenterWorld(tileOnTrigger);
-        
-        if (bulletDirection < 0)
-        {
-            Instantiate(tree, new Vector3((tileCenter.x + 1.5f), transform.position.y, 0), transform.rotation);
-        }
-        if (bulletDirection >= 0)
-        {
-            Instantiate(tree, new Vector3((tileCenter.x - 1.5f), transform.position.y, 0), transform.rotation);
         }
         
         Destroy(gameObject);

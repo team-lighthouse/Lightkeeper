@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     public float jumpTimeMax;
     public float jumpTimeMin;
     public float jumpEndPower;
+    public float shootTime;
     public GameObject seed;
 
     //for calculating max jump height (Debug)
@@ -27,15 +28,15 @@ public class Player : MonoBehaviour
     bool jumpMin = false;
 
     bool Shoot = false;
-    float shootTime = 0.5f;
 
     void Start()
     {
-        movePower = 10f;
+        movePower = 11f;
         jumpPower = 1000f;
         jumpTimeMax = 0.35f;
         jumpTimeMin = 0.15f;
         jumpEndPower = -0.45f;
+        shootTime = 0.1f;
 
         //
         YMax = transform.position.y;
@@ -70,7 +71,7 @@ public class Player : MonoBehaviour
             animator.SetBool("OnPlatform", false);
         }
 
-        if (Input.GetButtonDown("Fire1") && shootTime >= 0.5)
+        if (Input.GetButtonDown("Fire1") && shootTime >= 0.1)
         {
             Shoot = true;
             shootTime = 0;
@@ -167,7 +168,7 @@ public class Player : MonoBehaviour
     {
         if (!Shoot)
         {
-            if (shootTime < 0.5)
+            if (shootTime < 0.1)
             {
                 shootTime += Time.deltaTime;
             }
@@ -178,12 +179,12 @@ public class Player : MonoBehaviour
             Shoot = false;
             if (renderer.flipX == true)
             {
-                GameObject newSeed = Instantiate(seed, transform.position + (new Vector3(-1.4f, -0.25f, 0)), transform.rotation);
+                GameObject newSeed = Instantiate(seed, transform.position + Vector3.down * 0.25f, transform.rotation);
                 newSeed.GetComponent<Seed>().bulletDirection = -1;
             }
             else // renderer.flipX == false
             {
-                GameObject newSeed = Instantiate(seed, transform.position + (new Vector3(+1.4f, -0.25f, 0)), transform.rotation);
+                GameObject newSeed = Instantiate(seed, transform.position + Vector3.down * 0.25f, transform.rotation);
                 newSeed.GetComponent<Seed>().bulletDirection = 1;
             }
         }
