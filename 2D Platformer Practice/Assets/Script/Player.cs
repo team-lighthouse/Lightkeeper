@@ -33,8 +33,8 @@ public class Player : MonoBehaviour
     {
         movePower = 10f;
         jumpPower = 1000f;
-        jumpTimeMax = 0.8f;
-        jumpTimeMin = 0.4f;
+        jumpTimeMax = 0.35f;
+        jumpTimeMin = 0.15f;
         jumpEndPower = -0.45f;
 
         //
