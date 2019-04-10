@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     Quaternion StartingRotate;
     static bool isEnded = false;
 
-    // FIXME: sceneIdx. 현재는 scene 2 부터 되어있음.
+    // FIXME: sceneIdx. 현재는 sampleScene 부터 되어있음.
     static int sceneIdx = 0;
 
     void Awake()
@@ -45,6 +45,13 @@ public class GameManager : MonoBehaviour
 
             GUILayout.Label("GAME END");
 
+            if(sceneIdx<2 && GUILayout.Button ("GO NEXT"))
+            {
+                isEnded=false;
+                sceneIdx++;
+                SceneManager.LoadScene(sceneIdx, LoadSceneMode.Single);
+            }
+
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
 
@@ -55,7 +62,6 @@ public class GameManager : MonoBehaviour
 
     public static void EndGame()
     {
-        Time.timeScale = 0f;
         isEnded = true;
     }
 

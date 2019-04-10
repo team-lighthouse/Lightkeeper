@@ -190,6 +190,11 @@ public class Player : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 현재는 EndPoint와 충돌 할 때 게임 종료 함수 호출한다.
+    /// </summary>
+    /// <param name="col">End Point</param>
+
     void OnTriggerEnter2D (Collider2D col)
     {
         if(col.gameObject.tag == "EndPoint")
