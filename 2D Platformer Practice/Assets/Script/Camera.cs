@@ -1,11 +1,16 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Camera : MonoBehaviour
 {
-    public GameObject player;
+    private GameObject player;
     
+    void Start()
+    {
+        player = GameObject.FindGameObjectWithTag("Player");
+    }
+
     void LateUpdate()
     {
         //if (player.transform.position.y > 0)

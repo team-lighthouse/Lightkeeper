@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -187,6 +187,14 @@ public class Player : MonoBehaviour
                 GameObject newSeed = Instantiate(seed, transform.position + Vector3.down * 0.25f, transform.rotation);
                 newSeed.GetComponent<Seed>().bulletDirection = 1;
             }
+        }
+    }
+
+    void OnTriggerEnter2D (Collider2D col)
+    {
+        if(col.gameObject.tag == "EndPoint")
+        {
+            GameManager.EndGame();
         }
     }
     
