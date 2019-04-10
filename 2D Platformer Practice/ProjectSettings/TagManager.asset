@@ -7,6 +7,8 @@ TagManager:
   - Dirt
   - Tree
   - Seed
+  - StartPoint
+  - EndPoint
   layers:
   - Default
   - TransparentFX

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -187,14 +187,24 @@ public class Player : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter2D(Collider2D col)
+    /// <summary>
+    /// 현재는 EndPoint와 충돌 할 때 게임 종료 함수 호출한다.
+    /// </summary>
+    /// <param name="col">End Point</param>
+
+    void OnTriggerEnter2D (Collider2D col)
     {
+        if(col.gameObject.tag == "EndPoint")
+        {
+            GameManager.EndGame();
+        }
+        
         if (col.gameObject.layer == 8) // layer 8: platform
         {
             onPlatform = true;
         }
     }
-
+    
     void OnTriggerStay2D(Collider2D col)
     {
         if (col.gameObject.layer == 8) // layer 8: platform
