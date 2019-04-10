@@ -14,7 +14,7 @@ public class Seed : MonoBehaviour
     void Start()
     {
         bulletmovePow = 30f;
-        player = GameObject.Find("Player");
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     void FixedUpdate()
@@ -32,7 +32,7 @@ public class Seed : MonoBehaviour
     
     void OnTriggerEnter2D(Collider2D col)
     {
-        
+        Debug.Log("gone");
         Destroy(gameObject);
 
         /*

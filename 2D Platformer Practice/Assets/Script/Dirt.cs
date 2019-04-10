@@ -58,6 +58,17 @@ public class Dirt : MonoBehaviour
                 }
             }
 
+            if (!gameObject.GetComponent<Tilemap>().HasTile(tileOnTrigger + Vector3Int.up) &&
+                seedPosY > tileOnTrigger.y + 0.75f)
+            {
+                seedPosY = tileOnTrigger.y + 0.75f;
+            }
+            else if (!gameObject.GetComponent<Tilemap>().HasTile(tileOnTrigger + Vector3Int.down) &&
+                seedPosY < tileOnTrigger.y + 0.25f)
+            {
+                seedPosY = tileOnTrigger.y + 0.25f;
+            }
+
             Instantiate(tree, new Vector3(tileOnTrigger.x + 0.5f - 2.5f * seedDirection, seedPosY, 0), Quaternion.identity);
         }
     }

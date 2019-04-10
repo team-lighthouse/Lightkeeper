@@ -176,11 +176,13 @@ public class Player : MonoBehaviour
             Shoot = false;
             if (renderer.flipX == true)
             {
+                Debug.Log("fire");
                 GameObject newSeed = Instantiate(seed, transform.position + Vector3.down * 0.25f, Quaternion.identity);
                 newSeed.GetComponent<Seed>().bulletDirection = -1;
             }
             else // renderer.flipX == false
             {
+                Debug.Log("fire");
                 GameObject newSeed = Instantiate(seed, transform.position + Vector3.down * 0.25f, Quaternion.identity);
                 newSeed.GetComponent<Seed>().bulletDirection = 1;
             }

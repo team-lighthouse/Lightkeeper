@@ -9,10 +9,8 @@ public class Tree : MonoBehaviour
     void Start()
     {
         GameObject.Find("TreeCounter").GetComponent<TreeCounter>().trees.Enqueue(gameObject);
-        playerCol = GameObject.Find("Player").GetComponent<Collider2D>();
+        playerCol = GameObject.FindGameObjectWithTag("Player").GetComponent<Collider2D>();
         Physics2D.IgnoreCollision(playerCol, GetComponent<Collider2D>(), true);
-
-        
     }
 
     void OnTriggerStay2D(Collider2D col)
