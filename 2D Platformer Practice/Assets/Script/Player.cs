@@ -128,7 +128,6 @@ public class Player : MonoBehaviour
         {
             jumpMin = false;
             rigid.AddForce((jumpEndPower) * jumpVelocity, ForceMode2D.Force);
-            Debug.Log("-min");
             return;
         }
         if (!isJumping && (jumpTime > jumpTimeMin))
@@ -144,7 +143,6 @@ public class Player : MonoBehaviour
             if (jumpTime > jumpTimeMax)
             {
                 rigid.AddForce((jumpEndPower) * jumpVelocity, ForceMode2D.Force);
-                Debug.Log("-max");
                 isJumping = false;
                 return;
             }
@@ -157,7 +155,6 @@ public class Player : MonoBehaviour
                 else
                 {
                     rigid.AddForce((jumpEndPower) * jumpVelocity, ForceMode2D.Force);
-                    Debug.Log("-timing");
                 }
                 isJumping = false;
             }
@@ -179,17 +176,25 @@ public class Player : MonoBehaviour
             Shoot = false;
             if (renderer.flipX == true)
             {
-                GameObject newSeed = Instantiate(seed, transform.position + Vector3.down * 0.25f, transform.rotation);
+                GameObject newSeed = Instantiate(seed, transform.position + Vector3.down * 0.25f, Quaternion.identity);
                 newSeed.GetComponent<Seed>().bulletDirection = -1;
             }
             else // renderer.flipX == false
             {
-                GameObject newSeed = Instantiate(seed, transform.position + Vector3.down * 0.25f, transform.rotation);
+                GameObject newSeed = Instantiate(seed, transform.position + Vector3.down * 0.25f, Quaternion.identity);
                 newSeed.GetComponent<Seed>().bulletDirection = 1;
             }
         }
     }
-    
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.layer == 8) // layer 8: platform
+        {
+            onPlatform = true;
+        }
+    }
+
     void OnTriggerStay2D(Collider2D col)
     {
         if (col.gameObject.layer == 8) // layer 8: platform

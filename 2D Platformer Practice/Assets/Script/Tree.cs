@@ -11,18 +11,19 @@ public class Tree : MonoBehaviour
         GameObject.Find("TreeCounter").GetComponent<TreeCounter>().trees.Enqueue(gameObject);
         playerCol = GameObject.Find("Player").GetComponent<Collider2D>();
         Physics2D.IgnoreCollision(playerCol, GetComponent<Collider2D>(), true);
+
+        
     }
 
     void OnTriggerStay2D(Collider2D col)
     {
-        if (col.gameObject.layer == 10 && (col.transform.position.y < transform.position.y + 1))
+        if (col.gameObject.layer == 10 && (col.transform.position.y < transform.position.y + 0.25f))
         {
             Physics2D.IgnoreCollision(playerCol, GetComponent<Collider2D>(), true);
         }
         else
         {
             Physics2D.IgnoreCollision(playerCol, GetComponent<Collider2D>(), false);
-
         }
     }
 
