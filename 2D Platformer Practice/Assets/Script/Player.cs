@@ -70,7 +70,18 @@ public class Player : MonoBehaviour
             Shoot = true;
             shootTime = 0;
         }
-        
+
+        //
+        // if (transform.position.y > YMax)
+        // {
+        //     YMax = transform.position.y;
+        // }
+        // if (transform.position.y < YMin)
+        // {
+        //     YMin = transform.position.y;
+        // }
+        //Debug.Log("(YMax - YMin)/PlayerHeight: " + (YMax - YMin)/2);
+        //
     }
 
     void FixedUpdate()
