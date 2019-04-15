@@ -26,6 +26,7 @@ public class Player : MonoBehaviour
     float shootTime;
 
     bool live = true;
+    float deadTime = 1f;
 
     void Start()
     {
@@ -94,7 +95,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-
+            Dead();
         }
     }
 
@@ -192,7 +193,16 @@ public class Player : MonoBehaviour
 
     void Dead()
     {
-        GameManager.Restart();
+        if (deadTime < 1f)
+        {
+            deadTime += Time.deltaTime;
+        }
+        else
+        {
+            gameObject.transform.position = GameManager.StartingPos;
+            rigid.bodyType = RigidbodyType2D.Dynamic;
+            live = true;
+        }
     }
 
     /// <summary>
@@ -211,6 +221,7 @@ public class Player : MonoBehaviour
         {
             Debug.Log("dead");
             live = false;
+            deadTime = 0;
             // + animation change
             rigid.bodyType = RigidbodyType2D.Static;
         }

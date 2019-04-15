@@ -1,18 +1,16 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameObject player;
-    static Vector3 StartingPos;
+    public GameObject player;
+    public static Vector3 StartingPos;
     static bool isEnded = false;
 
     // FIXME: sceneIdx. 현재는 sampleScene 부터 되어있음.
     static int sceneIdx = 0;
-
-    static GameObject playerNow;
 
     void Awake()
     {
@@ -23,7 +21,7 @@ public class GameManager : MonoBehaviour
     {
         StartingPos = GameObject.FindGameObjectWithTag("StartPoint").transform.position;
 
-        playerNow = Instantiate(player, StartingPos, Quaternion.identity);
+        Instantiate(player, StartingPos, Quaternion.identity);
     }
 
     void OnGUI()
@@ -45,9 +43,9 @@ public class GameManager : MonoBehaviour
 
             GUILayout.Label("GAME END");
 
-            if(sceneIdx<2 && GUILayout.Button ("GO NEXT"))
+            if (sceneIdx < 2 && GUILayout.Button("GO NEXT"))
             {
-                isEnded=false;
+                isEnded = false;
                 sceneIdx++;
                 SceneManager.LoadScene(sceneIdx, LoadSceneMode.Single);
             }
@@ -59,13 +57,7 @@ public class GameManager : MonoBehaviour
         }
 
     }
-   
-    public static void Restart()
-    {
-        Destroy(playerNow);
-        playerNow = Instantiate(player, StartingPos, Quaternion.identity);
-    }
-
+    
     public static void EndGame()
     {
         isEnded = true;
