@@ -30,10 +30,10 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        movePower = 11f;
+        movePower = 7.5f;
         jumpPower = 1000f;
-        jumpTimeMax = 0.35f;
-        jumpTimeMin = 0.15f;
+        jumpTimeMax = 0.32f;
+        jumpTimeMin = 0.12f;
         jumpEndPower = -0.45f;
         shootDelay = 0.1f;
         shootTime = shootDelay + 1;
