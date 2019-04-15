@@ -70,18 +70,7 @@ public class Player : MonoBehaviour
             Shoot = true;
             shootTime = 0;
         }
-
-        //
-        if (transform.position.y > YMax)
-        {
-            YMax = transform.position.y;
-        }
-        if (transform.position.y < YMin)
-        {
-            YMin = transform.position.y;
-        }
-        //Debug.Log("(YMax - YMin)/PlayerHeight: " + (YMax - YMin)/2);
-        //
+        
     }
 
     void FixedUpdate()
@@ -91,6 +80,10 @@ public class Player : MonoBehaviour
             Move();
             Jump();
             Shot();
+        }
+        else
+        {
+
         }
     }
 
@@ -188,7 +181,7 @@ public class Player : MonoBehaviour
 
     void Dead()
     {
-        
+        GameManager.Restart();
     }
 
     /// <summary>
@@ -205,7 +198,10 @@ public class Player : MonoBehaviour
 
         if(col.gameObject.tag == "Thorn")
         {
+            Debug.Log("dead");
             live = false;
+            // + animation change
+            rigid.bodyType = RigidbodyType2D.Static;
         }
         
         if (col.gameObject.layer == 8 || col.gameObject.layer == 11) // layer 8: platform, layer 11: platformTree

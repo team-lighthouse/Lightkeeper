@@ -5,12 +5,14 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject player;
-    Vector3 StartingPos;
+    public static GameObject player;
+    static Vector3 StartingPos;
     static bool isEnded = false;
 
     // FIXME: sceneIdx. 현재는 sampleScene 부터 되어있음.
     static int sceneIdx = 0;
+
+    static GameObject playerNow;
 
     void Awake()
     {
@@ -21,7 +23,7 @@ public class GameManager : MonoBehaviour
     {
         StartingPos = GameObject.FindGameObjectWithTag("StartPoint").transform.position;
 
-        Instantiate(player, StartingPos, Quaternion.identity);
+        playerNow = Instantiate(player, StartingPos, Quaternion.identity);
     }
 
     void OnGUI()
@@ -58,6 +60,11 @@ public class GameManager : MonoBehaviour
 
     }
    
+    public static void Restart()
+    {
+        Destroy(playerNow);
+        playerNow = Instantiate(player, StartingPos, Quaternion.identity);
+    }
 
     public static void EndGame()
     {
