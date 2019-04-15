@@ -72,14 +72,14 @@ public class Player : MonoBehaviour
         }
 
         //
-        if (transform.position.y > YMax)
-        {
-            YMax = transform.position.y;
-        }
-        if (transform.position.y < YMin)
-        {
-            YMin = transform.position.y;
-        }
+        // if (transform.position.y > YMax)
+        // {
+        //     YMax = transform.position.y;
+        // }
+        // if (transform.position.y < YMin)
+        // {
+        //     YMin = transform.position.y;
+        // }
         //Debug.Log("(YMax - YMin)/PlayerHeight: " + (YMax - YMin)/2);
         //
     }
