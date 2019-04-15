@@ -12,11 +12,6 @@ public class Player : MonoBehaviour
     public float shootDelay;
     public GameObject seed;
 
-    //for calculating max jump height (Debug)
-    float YMax;
-    float YMin;
-    //
-
     Rigidbody2D rigid;
     new SpriteRenderer renderer;
     Animator animator;
@@ -30,6 +25,8 @@ public class Player : MonoBehaviour
     bool Shoot = false;
     float shootTime;
 
+    bool live = true;
+
     void Start()
     {
         movePower = 11f;
@@ -39,11 +36,6 @@ public class Player : MonoBehaviour
         jumpEndPower = -0.45f;
         shootDelay = 0.1f;
         shootTime = shootDelay + 1;
-
-        //
-        YMax = transform.position.y;
-        YMin = transform.position.y;
-        //
 
         rigid = gameObject.GetComponent<Rigidbody2D>();
         renderer = gameObject.GetComponentInChildren<SpriteRenderer>();
@@ -94,9 +86,12 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
-        Move();
-        Jump();
-        Shot();
+        if (live)
+        {
+            Move();
+            Jump();
+            Shot();
+        }
     }
 
     void Move()
@@ -191,6 +186,11 @@ public class Player : MonoBehaviour
         }
     }
 
+    void Dead()
+    {
+        
+    }
+
     /// <summary>
     /// 현재는 EndPoint와 충돌 할 때 게임 종료 함수 호출한다.
     /// </summary>
@@ -201,6 +201,11 @@ public class Player : MonoBehaviour
         if(col.gameObject.tag == "EndPoint")
         {
             GameManager.EndGame();
+        }
+
+        if(col.gameObject.tag == "Thorn")
+        {
+            live = false;
         }
         
         if (col.gameObject.layer == 8 || col.gameObject.layer == 11) // layer 8: platform, layer 11: platformTree
@@ -225,6 +230,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    /*
     void OnCollisionEnter2D(Collision2D col)
     {
         int cnt = 0;
@@ -247,5 +253,6 @@ public class Player : MonoBehaviour
             Debug.Log(contact.point.y + " " + cnt);
         }
     }
+    */
 
 }

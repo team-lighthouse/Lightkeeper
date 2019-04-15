@@ -7,7 +7,6 @@ public class GameManager : MonoBehaviour
 {
     public GameObject player;
     Vector3 StartingPos;
-    Quaternion StartingRotate;
     static bool isEnded = false;
 
     // FIXME: sceneIdx. 현재는 sampleScene 부터 되어있음.
@@ -21,9 +20,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         StartingPos = GameObject.FindGameObjectWithTag("StartPoint").transform.position;
-        StartingRotate = GameObject.FindGameObjectWithTag("StartPoint").transform.rotation;
 
-        Instantiate(player, StartingPos, StartingRotate);
+        Instantiate(player, StartingPos, Quaternion.identity);
     }
 
     void OnGUI()
