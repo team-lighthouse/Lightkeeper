@@ -9,6 +9,7 @@ TagManager:
   - Seed
   - StartPoint
   - EndPoint
+  - Thorn
   layers:
   - Default
   - TransparentFX
