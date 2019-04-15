@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7246003742793599570}
   - component: {fileID: 1837391970366642660}
   m_Layer: 9
-  m_Name: seed
+  m_Name: Seed
   m_TagString: Seed
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -71,7 +71,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 300
   m_Sprite: {fileID: 21300000, guid: 6332201fa7c827e4793e53361ef3ec34, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -98,7 +98,6 @@ MonoBehaviour:
   bulletmovePow: 30
   bulletDirection: 0
   tree: {fileID: 7963318587997351003, guid: 2d60832b0553301409d11a097299ea8e, type: 3}
-  point: {fileID: 4874434214355818056, guid: 36211761e561afb49a86bd7af4db68d8, type: 3}
 --- !u!50 &7246003742793599570
 Rigidbody2D:
   serializedVersion: 4

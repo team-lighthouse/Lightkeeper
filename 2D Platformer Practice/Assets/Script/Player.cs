@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
     public float jumpTimeMax;
     public float jumpTimeMin;
     public float jumpEndPower;
-    public float shootTime;
+    public float shootDelay;
     public GameObject seed;
 
     //for calculating max jump height (Debug)
@@ -28,6 +28,7 @@ public class Player : MonoBehaviour
     bool jumpMin = false;
 
     bool Shoot = false;
+    float shootTime;
 
     void Start()
     {
@@ -36,7 +37,8 @@ public class Player : MonoBehaviour
         jumpTimeMax = 0.35f;
         jumpTimeMin = 0.15f;
         jumpEndPower = -0.45f;
-        shootTime = 0.1f;
+        shootDelay = 0.1f;
+        shootTime = shootDelay + 1;
 
         //
         YMax = transform.position.y;
@@ -71,7 +73,7 @@ public class Player : MonoBehaviour
             animator.SetBool("OnPlatform", false);
         }
 
-        if (Input.GetButtonDown("Fire1") && shootTime >= 0.1)
+        if (Input.GetButtonDown("Fire1") && shootTime >= shootDelay)
         {
             Shoot = true;
             shootTime = 0;
@@ -165,7 +167,7 @@ public class Player : MonoBehaviour
     {
         if (!Shoot)
         {
-            if (shootTime < 0.1)
+            if (shootTime < shootDelay)
             {
                 shootTime += Time.deltaTime;
             }
@@ -201,7 +203,7 @@ public class Player : MonoBehaviour
             GameManager.EndGame();
         }
         
-        if (col.gameObject.layer == 8) // layer 8: platform
+        if (col.gameObject.layer == 8 || col.gameObject.layer == 11) // layer 8: platform, layer 11: platformTree
         {
             onPlatform = true;
         }
@@ -209,7 +211,7 @@ public class Player : MonoBehaviour
     
     void OnTriggerStay2D(Collider2D col)
     {
-        if (col.gameObject.layer == 8) // layer 8: platform
+        if (col.gameObject.layer == 8 || col.gameObject.layer == 11) // layer 8: platform, layer 11: platformTree
         {
             onPlatform = true;
         }
@@ -217,9 +219,33 @@ public class Player : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D col)
     {
-        if (col.gameObject.layer == 8) // layer 8: platform
+        if (col.gameObject.layer == 8 || col.gameObject.layer == 11) // layer 8: platform, layer 11: platformTree
         {
             onPlatform = false;
         }
     }
+
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        int cnt = 0;
+        foreach (ContactPoint2D contact in col.contacts)
+        {
+            cnt++;
+            // Visualize the contact point
+            Debug.DrawRay(contact.point, contact.normal, Color.white);
+            Debug.Log(contact.point.y + " " + cnt);
+        }
+    }
+    void OnCollisionStay2D(Collision2D col)
+    {
+        int cnt = 0;
+        foreach (ContactPoint2D contact in col.contacts)
+        {
+            cnt++;
+            // Visualize the contact point
+            Debug.DrawRay(contact.point, contact.normal, Color.white);
+            Debug.Log(contact.point.y + " " + cnt);
+        }
+    }
+
 }

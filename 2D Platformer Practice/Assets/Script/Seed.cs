@@ -32,8 +32,10 @@ public class Seed : MonoBehaviour
     
     void OnTriggerEnter2D(Collider2D col)
     {
-        Debug.Log("gone");
-        Destroy(gameObject);
+        if (col.gameObject.layer == 8 || col.gameObject.layer == 12)
+        {
+            Destroy(gameObject);
+        }
 
         /*
         if (col.CompareTag("Dirt"))
