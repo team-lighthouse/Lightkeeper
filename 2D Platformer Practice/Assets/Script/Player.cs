@@ -30,7 +30,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        movePower = 7.5f;
+        movePower = 9f;
         jumpPower = 1000f;
         jumpTimeMax = 0.32f;
         jumpTimeMin = 0.12f;
@@ -107,13 +107,13 @@ public class Player : MonoBehaviour
         if (Input.GetAxisRaw ("Horizontal") < 0)
         {
             moveVelocity = Vector3.left;
-            renderer.flipX = true;
+            renderer.flipX = false;
             isWalking = true;
         }
         else if (Input.GetAxisRaw ("Horizontal") > 0)
         {
             moveVelocity = Vector3.right;
-            renderer.flipX = false;
+            renderer.flipX = true;
             isWalking = true;
         }
 
@@ -176,13 +176,13 @@ public class Player : MonoBehaviour
         else
         {
             Shoot = false;
-            if (renderer.flipX == true)
+            if (renderer.flipX == false)
             {
                 Debug.Log("fire");
                 GameObject newSeed = Instantiate(seed, transform.position + Vector3.down * 0.25f, Quaternion.identity);
                 newSeed.GetComponent<Seed>().bulletDirection = -1;
             }
-            else // renderer.flipX == false
+            else // renderer.flipX == true
             {
                 Debug.Log("fire");
                 GameObject newSeed = Instantiate(seed, transform.position + Vector3.down * 0.25f, Quaternion.identity);
