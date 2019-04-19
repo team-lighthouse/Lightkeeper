@@ -9,17 +9,33 @@ public class GameManager : MonoBehaviour
     public static Vector3 StartingPos;
     static bool isEnded = false;
 
+    public bool resetCheckPoint = false;
+
     // FIXME: sceneIdx. 현재는 sampleScene 부터 되어있음.
-    static int sceneIdx = 0;
+    public static int sceneIdx = 0;
 
     void Awake()
     {
         sceneIdx = SceneManager.GetActiveScene().buildIndex;
+        if(resetCheckPoint)
+        {
+            PlayerPrefs.DeleteAll();
+        }
     }
 
     void Start()
     {
-        StartingPos = GameObject.FindGameObjectWithTag("StartPoint").transform.position;
+        if(PlayerPrefs.HasKey("CheckPoint_" + sceneIdx.ToString()))
+        {
+            int CheckPointIdx = PlayerPrefs.GetInt("CheckPoint_" + sceneIdx.ToString());
+            Debug.Log("SCENE Index: " + sceneIdx.ToString());
+            Debug.Log("CHECK POINT Index: " + CheckPointIdx.ToString());
+            StartingPos = GameObject.Find("CheckPoint_" + sceneIdx.ToString() + "_" +CheckPointIdx.ToString()).transform.position;
+        }
+        else
+        {
+            StartingPos = GameObject.FindGameObjectWithTag("StartPoint").transform.position;
+        }
 
         Instantiate(player, StartingPos, Quaternion.identity);
     }

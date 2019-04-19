@@ -217,6 +217,15 @@ public class Player : MonoBehaviour
             GameManager.EndGame();
         }
 
+        if(col.gameObject.tag == "CheckPoint")
+        {
+            char sp = '_';
+            string[] splited = col.gameObject.name.Split(sp);
+            Debug.Log("Splited :" + " 0: " + splited[0] + " 1: " + splited[1] + " 2: "+splited[2]);
+            PlayerPrefs.SetInt("CheckPoint_" + GameManager.sceneIdx, int.Parse(splited[2]));
+            GameManager.StartingPos = col.gameObject.transform.position;
+        }
+
         if(col.gameObject.tag == "Thorn")
         {
             Debug.Log("dead");
