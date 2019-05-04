@@ -6,6 +6,7 @@ public class Player_feet : MonoBehaviour
 {
     public bool feetOnPlatform;
     public bool feetOnJumper;
+    public bool feetOnIce;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -18,6 +19,10 @@ public class Player_feet : MonoBehaviour
         {
             feetOnJumper = true;
         }
+        if (collision.gameObject.CompareTag("Ice"))
+        {
+            feetOnIce = true;
+        }
     }
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -26,6 +31,10 @@ public class Player_feet : MonoBehaviour
             collision.gameObject.layer == 21) // Wood
         {
             feetOnPlatform = true;
+        }
+        if (collision.gameObject.CompareTag("Ice"))
+        {
+            feetOnIce = true;
         }
     }
 
@@ -39,6 +48,10 @@ public class Player_feet : MonoBehaviour
             {
                 gameObject.GetComponentInParent<Player>().canJumpNum--;
             }
+        }
+        if (collision.gameObject.CompareTag("Ice"))
+        {
+            feetOnIce = false;
         }
     }
 }

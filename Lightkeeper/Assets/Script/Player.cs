@@ -78,22 +78,43 @@ public class Player : MonoBehaviour
 
     void Move()
     {
-        if (gameObject.GetComponentInChildren<Player_feet_center>().feetOnIce) // move on ice
+        if (gameObject.GetComponentInChildren<Player_feet>().feetOnIce) // move on ice
         {
-            rb.velocity = new Vector2(rb.velocity.x + Input.GetAxisRaw("Horizontal") * moveSpeed * 0.05f, rb.velocity.y);
-
-            if (rb.velocity.x >= moveSpeed)
+            rb.velocity = new Vector2(rb.velocity.x * 0.99f + Input.GetAxisRaw("Horizontal") * moveSpeed * 0.04f, rb.velocity.y);
+            if (Input.GetAxisRaw("Horizontal") * rb.velocity.x < 0) // velocity direction and input direction is opposite
             {
-                rb.velocity = new Vector2(moveSpeed, rb.velocity.y);
+                animator.speed = 2f;
             }
-            else if (rb.velocity.x <= -moveSpeed)
+            else
             {
-                rb.velocity = new Vector2(-moveSpeed, rb.velocity.y);
+                animator.speed = 1f;
             }
         }
         else // normal move
         {
-            rb.velocity = new Vector2(Input.GetAxisRaw("Horizontal") * moveSpeed, rb.velocity.y);
+            animator.speed = 1f;
+            if (gameObject.GetComponentInChildren<Player_feet>().feetOnPlatform) // move on platform
+            {
+                rb.velocity = new Vector2(Input.GetAxisRaw("Horizontal") * moveSpeed, rb.velocity.y);
+            }
+            else // move on air
+            {
+                rb.velocity = new Vector2(rb.velocity.x * 0.9f + Input.GetAxisRaw("Horizontal") * moveSpeed, rb.velocity.y);
+            }
+        }
+        
+        if (rb.velocity.x >= moveSpeed)
+        {
+            rb.velocity = new Vector2(moveSpeed, rb.velocity.y);
+        }
+        else if (rb.velocity.x <= -moveSpeed)
+        {
+            rb.velocity = new Vector2(-moveSpeed, rb.velocity.y);
+        }
+
+        if (rb.velocity.x < 0.05f && rb.velocity.x > -0.05f)
+        {
+            rb.velocity = new Vector2(0, rb.velocity.y);
         }
 
         // TODO: Side spring
