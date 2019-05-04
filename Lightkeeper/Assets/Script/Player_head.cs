@@ -8,7 +8,8 @@ public class Player_head : MonoBehaviour
 
     void Update()
     {
-        //Debug.Log(headTouch);
+        Debug.Log("headTouch");
+        Debug.Log(headTouch);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -16,6 +17,7 @@ public class Player_head : MonoBehaviour
         if (collision.gameObject.layer == 20) // Dirt,Stone
         {
             headTouch = true;
+            gameObject.GetComponentInParent<Player>().isJumping = false;
         }
     }
 
@@ -24,6 +26,7 @@ public class Player_head : MonoBehaviour
         if (collision.gameObject.layer == 20) // Dirt,Stone
         {
             headTouch = true;
+            gameObject.GetComponentInParent<Player>().isJumping = false;
         }
     }
 

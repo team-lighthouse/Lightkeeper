@@ -6,11 +6,6 @@ public class Player_feet_center : MonoBehaviour
 {
     public bool feetOnIce = false;
 
-    void Update()
-    {
-        Debug.Log(feetOnIce);
-    }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.layer == 22) // Ice

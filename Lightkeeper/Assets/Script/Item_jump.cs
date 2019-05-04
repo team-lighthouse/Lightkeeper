@@ -40,14 +40,4 @@ public class Item_jump : MonoBehaviour
             collision.gameObject.GetComponent<Player>().canJumpNum++;
         }
     }
-
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-
-    }
 }
