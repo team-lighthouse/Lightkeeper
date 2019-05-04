@@ -5,6 +5,7 @@ using UnityEngine;
 public class Player_feet : MonoBehaviour
 {
     public bool feetOnPlatform;
+    public bool feetOnJumper;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -12,6 +13,10 @@ public class Player_feet : MonoBehaviour
             collision.gameObject.layer == 21) // Wood
         {
             feetOnPlatform = true;
+        }
+        if (collision.gameObject.CompareTag("Jumper"))
+        {
+            feetOnJumper = true;
         }
     }
 
@@ -30,8 +35,10 @@ public class Player_feet : MonoBehaviour
             collision.gameObject.layer == 21) // Wood
         {
             feetOnPlatform = false;
-            gameObject.GetComponentInParent<Player>().canJumpNum--;
+            if (!feetOnJumper)
+            {
+                gameObject.GetComponentInParent<Player>().canJumpNum--;
+            }
         }
     }
-
 }

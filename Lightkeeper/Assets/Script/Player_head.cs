@@ -6,12 +6,6 @@ public class Player_head : MonoBehaviour
 {
     public bool headTouch;
 
-    void Update()
-    {
-        Debug.Log("headTouch");
-        Debug.Log(headTouch);
-    }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.layer == 20) // Dirt,Stone

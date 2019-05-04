@@ -8,7 +8,7 @@ public class Player_feet_center : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.layer == 22) // Ice
+        if (collision.gameObject.CompareTag("Ice"))
         {
             feetOnIce = true;
         }
@@ -16,7 +16,7 @@ public class Player_feet_center : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.gameObject.layer == 22) // Ice
+        if (collision.gameObject.CompareTag("Ice"))
         {
             feetOnIce = true;
         }
@@ -24,7 +24,7 @@ public class Player_feet_center : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.layer == 22) // Ice
+        if (collision.gameObject.CompareTag("Ice"))
         {
             feetOnIce = false;
         }

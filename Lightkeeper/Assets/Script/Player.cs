@@ -8,19 +8,22 @@ public class Player : MonoBehaviour
 
     float jumpSpeed = 20f;
     float jumpTime;
-    float jumpTimeMax = 0.22f;
-    float jumpTimeMin = 0.028f;
+    float jumpTimeMax = 0.23f;
+    float jumpTimeMin = 0.06f;
     int defaultCanJumpNum = 1;
-    public int canJumpNum; // Player_feet can change this variable
-    public bool isJumping = false; // Player_head can change this variable
+    public int canJumpNum; // Player_feet.cs, Jumper.cs, Item_jump.cs can change this variable
+    public bool isJumping = false; // Player_head.cs can change this variable
     bool isShortJump = false;
+    bool isJumperJump = false;
+    float jumperJumpSpeed = 30f;
+    float jumperJumpTimeLimit = 0.3f;
     bool jumpKeyPressed = false;
 
-    float shootDelay = 0.4f;
+    //float shootDelay = 0.4f;
     //bool Shoot = false;
     //bool shootTime;
     
-    float fallingSpeedMax = 20f;
+    float fallingSpeedMax = 25f;
 
     public GameObject seed;
 
@@ -47,7 +50,9 @@ public class Player : MonoBehaviour
         {
             Move();
 
-            if (gameObject.GetComponentInChildren<Player_feet>().feetOnPlatform & !isJumping) // reset canJumpNum when player land on platform
+            if (gameObject.GetComponentInChildren<Player_feet>().feetOnPlatform &&
+                animator.GetCurrentAnimatorClipInfo(0)[0].clip.name != "rise" &&
+                animator.GetCurrentAnimatorClipInfo(0)[0].clip.name != "fall") // reset canJumpNum when player animation is landing on platform
             {
                 canJumpNum = defaultCanJumpNum;
             }
@@ -96,7 +101,21 @@ public class Player : MonoBehaviour
 
     void Jump()
     {
-        if (isJumping)
+        if (isJumperJump) // jump by jumper
+        {
+            if (jumpTime >= jumperJumpTimeLimit) // jumper jump end
+            {
+                isJumping = false;
+                isJumperJump = false;
+                return;
+            }
+            
+            jumpTime += Time.deltaTime;
+            rb.velocity = new Vector2(rb.velocity.x, jumperJumpSpeed);
+            return;
+        }
+
+        if (isJumping) // jump by jump key input
         {
             if (jumpTime >= jumpTimeMin && isShortJump) // short jump end
             {
@@ -110,11 +129,13 @@ public class Player : MonoBehaviour
                 if (jumpTime >= jumpTimeMax) // max jump end 
                 {
                     isJumping = false;
+                    return;
                 }
                 else
                 {
                     isJumping = true;
                     jumpTime += Time.deltaTime;
+                    rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
                 }
             }
             else // jump key is not pressed
@@ -122,19 +143,16 @@ public class Player : MonoBehaviour
                 if (jumpTime >= jumpTimeMin) // normal jump end
                 {
                     isJumping = false;
+                    return;
                 }
                 else // jump key released before jumpTimeMin, it is short jump
                 {
                     isJumping = true;
                     isShortJump = true;
                     jumpTime += Time.deltaTime;
+                    rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
                 }
             }
-        }
-
-        if (isJumping)
-        {
-            rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
         }
     }
 
@@ -150,13 +168,6 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("canJumpNum");
-        Debug.Log(canJumpNum);
-        Debug.Log("isJumping");
-        Debug.Log(isJumping);
-        Debug.Log("jumpKeyPressed");
-        Debug.Log(jumpKeyPressed);
-
         // change animation
         animator.SetFloat("velocityY", rb.velocity.y);
 
@@ -180,8 +191,18 @@ public class Player : MonoBehaviour
             renderer.flipX = true;
         }
 
+        // detect jumper (Jumper jump start)
+        if (gameObject.GetComponentInChildren<Player_feet>().feetOnJumper) {
+            gameObject.GetComponentInChildren<Player_feet>().feetOnJumper = false;
+            canJumpNum = defaultCanJumpNum;
+            canJumpNum--;
+            isJumperJump = true;
+            isJumping = true;
+            jumpTime = 0f;
+        }
+
         // detect jump key (Jump start)
-        if (Input.GetKeyDown(KeyCode.X) && canJumpNum > 0) // canJumpNum check
+        if (!isJumperJump && Input.GetKeyDown(KeyCode.X) && canJumpNum > 0) // is not jumper jumping && canJumpNum is positive
         {
             if (!gameObject.GetComponentInChildren<Player_feet>().feetOnPlatform) // jumping in air decreases canJumpNum
             {
@@ -191,7 +212,6 @@ public class Player : MonoBehaviour
             isJumping = true;
             isShortJump = false;
             jumpTime = 0f;
-            Debug.Log("jumpTime reset");
         }
 
         jumpKeyPressed = Input.GetKey(KeyCode.X);

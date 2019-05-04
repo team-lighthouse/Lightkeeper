@@ -3,7 +3,10 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Player_feet
+  - Ice
+  - Jumper
   layers:
   - Default
   - TransparentFX
@@ -27,7 +30,7 @@ TagManager:
   - 
   - Dirt,Stone
   - Wood
-  - Ice
+  - 
   - 
   - 
   - 
