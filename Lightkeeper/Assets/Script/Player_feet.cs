@@ -43,11 +43,13 @@ public class Player_feet : MonoBehaviour
         if (collision.gameObject.layer == 20 || // Dirt,Stone
             collision.gameObject.layer == 21) // Wood
         {
-            feetOnPlatform = false;
-            if (!feetOnJumper)
+            if (!feetOnJumper && 
+                gameObject.GetComponentInParent<Player>().animator.GetCurrentAnimatorClipInfo(0)[0].clip.name != "rise" &&
+                gameObject.GetComponentInParent<Player>().animator.GetCurrentAnimatorClipInfo(0)[0].clip.name != "fall")
             {
                 gameObject.GetComponentInParent<Player>().canJumpNum--;
             }
+            feetOnPlatform = false;
         }
         if (collision.gameObject.CompareTag("Ice"))
         {

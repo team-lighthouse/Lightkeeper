@@ -5,6 +5,10 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     float moveSpeed = 9f;
+    float pusherMoveTime;
+    int isPusherMove = 0; // -1: toLeft, 0: none, 1: toRight
+    float pusherMoveSpeed = 60f;
+    float pusherMoveTimeLimit = 0.25f;
 
     float jumpSpeed = 20f;
     float jumpTime;
@@ -29,13 +33,15 @@ public class Player : MonoBehaviour
 
     Rigidbody2D rb;
     new SpriteRenderer renderer;
-    Animator animator;
+    public Animator animator; // Player_feet.cs check animation for avoid 'side platform landing'
 
     bool live = true;
     float deadTime = 1f;
 
     void Start()
     {
+        pusherMoveTime = pusherMoveTimeLimit;
+
         canJumpNum = defaultCanJumpNum;
         jumpTime = jumpTimeMax;
 
@@ -78,6 +84,26 @@ public class Player : MonoBehaviour
 
     void Move()
     {
+        if (isPusherMove != 0) // -1(toLeft) or 1(toRight)
+        {
+            if (pusherMoveTime == 0f)
+            {
+                rb.velocity = new Vector2(pusherMoveSpeed * isPusherMove, 5f);
+                pusherMoveTime += Time.deltaTime;
+                return;
+            }
+            else if (pusherMoveTime < pusherMoveTimeLimit)
+            {
+                rb.velocity = new Vector2((pusherMoveSpeed - pusherMoveTime * 200f) * isPusherMove, rb.velocity.y);
+                pusherMoveTime += Time.deltaTime;
+                return;
+            }
+            else
+            {
+                isPusherMove = 0; // pusher move end
+            }
+        }
+
         if (gameObject.GetComponentInChildren<Player_feet>().feetOnIce) // move on ice
         {
             rb.velocity = new Vector2(rb.velocity.x * 0.99f + Input.GetAxisRaw("Horizontal") * moveSpeed * 0.04f, rb.velocity.y);
@@ -122,6 +148,14 @@ public class Player : MonoBehaviour
 
     void Jump()
     {
+        if (isPusherMove != 0) // if player use pusher, jump ends
+        {
+            isJumping = false;
+            isJumperJump = false;
+            isShortJump = false;
+            return;
+        }
+
         if (isJumperJump) // jump by jumper
         {
             if (jumpTime >= jumperJumpTimeLimit) // jumper jump end
@@ -223,8 +257,8 @@ public class Player : MonoBehaviour
         }
 
         // detect jump key (Jump start)
-        if (!isJumperJump && Input.GetKeyDown(KeyCode.X) && canJumpNum > 0) // is not jumper jumping && canJumpNum is positive
-        {
+        if (isPusherMove == 0 && !isJumperJump && Input.GetKeyDown(KeyCode.X) && canJumpNum > 0)
+        { // is not using pusher && is not using jumper && canJumpNum is positive
             if (!gameObject.GetComponentInChildren<Player_feet>().feetOnPlatform) // jumping in air decreases canJumpNum
             {
                 canJumpNum--;
@@ -240,7 +274,18 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // TODO: Side spring
+        if (collision.gameObject.CompareTag("Pusher_toRight"))
+        {
+            isPusherMove = 1;
+            pusherMoveTime = 0f;
+        }
+        else if (collision.gameObject.CompareTag("Pusher_toLeft"))
+        {
+            isPusherMove = -1;
+            pusherMoveTime = 0f;
+        }
+
+        // TODO? : coin item will be managed by GameManager
     }
 
     private void OnTriggerStay2D(Collider2D collision)

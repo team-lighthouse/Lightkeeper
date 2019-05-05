@@ -7,6 +7,8 @@ TagManager:
   - Player_feet
   - Ice
   - Jumper
+  - Pusher_toRight
+  - Pusher_toLeft
   layers:
   - Default
   - TransparentFX
