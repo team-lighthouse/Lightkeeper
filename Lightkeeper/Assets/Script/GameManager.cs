@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
+
 
 /// <summary>
 /// Scene 전환, UI 처리
@@ -28,6 +30,20 @@ public class GameManager : MonoBehaviour
 
         GUILayout.EndHorizontal();
         GUILayout.EndArea();
+    }
+
+    /// <summary>
+    /// 월드맵의 버튼을 처리하는 함수
+    /// </summary>
+    public void WorldMapBtnClick()
+    {
+        Debug.Log("BUTTON NAME: " + EventSystem.current.currentSelectedGameObject.name);
+
+        char sp = '_';
+        string[] splited = EventSystem.current.currentSelectedGameObject.name.Split(sp);
+        Debug.Log("Go To Scene :" + splited[1]);
+
+        SceneManager.LoadScene(int.Parse(splited[1]), LoadSceneMode.Single);
     }
 
 }
