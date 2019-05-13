@@ -27,6 +27,7 @@ public class InStageManager : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("SCENE IDX: " + GameManager.sceneIndex.ToString());
         if(PlayerPrefs.HasKey("CheckPoint_" + GameManager.sceneIndex.ToString()))
         {
             int CheckPointIdx = PlayerPrefs.GetInt("CheckPoint_" + GameManager.sceneIndex.ToString());
