@@ -11,10 +11,29 @@ using UnityEngine.EventSystems;
 public class GameManager : MonoBehaviour
 {
     public static int sceneIndex = 0;
+    bool pause = false;
+
+    GameObject pauseBtn, chkPointBtn, mapBtn, resumeBtn;
+
+
+
     void Awake()
     {
         // 현재 scene의 번호를 받아온다. scene index는 build setting에서 설정 가능.
         sceneIndex = SceneManager.GetActiveScene().buildIndex;
+
+        if(sceneIndex != 0)
+        {
+            // GameObject.Find 가 inactive gameobject를 받아오지 못해서 넣은 코드.
+            pauseBtn = GameObject.Find("PauseBtn");
+            chkPointBtn = GameObject.Find("GoToPointBtn");
+            mapBtn = GameObject.Find("GoToMapBtn");
+            resumeBtn = GameObject.Find("ResumeBtn");
+
+            chkPointBtn.SetActive(false);
+            mapBtn.SetActive(false);
+            resumeBtn.SetActive(false);
+        }
     }
 
     /// <summary>
@@ -30,6 +49,15 @@ public class GameManager : MonoBehaviour
 
         GUILayout.EndHorizontal();
         GUILayout.EndArea();
+
+        if(pause) // 일시정지 화면
+        {
+            Time.timeScale = 0.0f;
+        }
+        else
+        {
+            Time.timeScale = 1.0f;
+        }
     }
 
     /// <summary>
@@ -44,6 +72,54 @@ public class GameManager : MonoBehaviour
         Debug.Log("Go To Scene :" + splited[1]);
 
         SceneManager.LoadScene(int.Parse(splited[1]), LoadSceneMode.Single);
+    }
+
+    // 일시정지 기능 구현하기
+    public void PauseBtnClick()
+    {
+        pause = true;
+        
+        chkPointBtn.SetActive(true);
+        mapBtn.SetActive(true);
+        resumeBtn.SetActive(true);
+        pauseBtn.SetActive(false);
+    }
+
+    public void GoToMapBtnClick()
+    {
+        chkPointBtn.SetActive(false);
+        mapBtn.SetActive(false);
+        resumeBtn.SetActive(false);
+        pauseBtn.SetActive(false);
+
+        SceneManager.LoadScene(0, LoadSceneMode.Single);
+
+        pause = false;
+    }
+
+    public void GoToPointBtnClick()
+    {
+        // TODO: not yet implemented
+        chkPointBtn.SetActive(false);
+        mapBtn.SetActive(false);
+        resumeBtn.SetActive(false);
+        pauseBtn.SetActive(true);
+
+        InStageManager ISM = GameObject.Find("Managers").GetComponent<InStageManager>();
+        // Debug.LogError(ISM);
+        ISM.returnCheckPoint();
+
+        pause = false;
+    }
+
+    public void ResumeBtnClick()
+    {
+        chkPointBtn.SetActive(false);
+        mapBtn.SetActive(false);
+        resumeBtn.SetActive(false);
+        pauseBtn.SetActive(true);
+
+        pause = false;
     }
 
 }

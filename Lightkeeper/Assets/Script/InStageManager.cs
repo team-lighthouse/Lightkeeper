@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 
 /// <summary>
 /// 스테이지 내부에서 일어나는 일들을 처리하는 매니저.
-/// 스테이
 /// </summary>
 public class InStageManager : MonoBehaviour
 {
@@ -75,9 +74,9 @@ public class InStageManager : MonoBehaviour
     }
 
     // 체크포인트로 되돌아감.
-    void returnCheckPoint()
+    public void returnCheckPoint()
     {
-
+        GameObject.FindGameObjectWithTag("Player").transform.position = StartingPos + new Vector3(0, 0.5f, 0);
     }
 
     public void chkCheckPoint()
