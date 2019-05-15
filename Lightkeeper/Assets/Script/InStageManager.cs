@@ -73,4 +73,15 @@ public class InStageManager : MonoBehaviour
     {
         isEnded = true;
     }
+
+    // 체크포인트로 되돌아감.
+    void returnCheckPoint()
+    {
+
+    }
+
+    public void chkCheckPoint()
+    {
+
+    }
 }
