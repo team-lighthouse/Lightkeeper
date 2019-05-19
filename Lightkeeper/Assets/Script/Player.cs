@@ -33,8 +33,9 @@ public class Player : MonoBehaviour
     Rigidbody2D rb;
     new SpriteRenderer renderer;
     public Animator animator; // Player_feet.cs check animation for avoid 'side platform landing'
+    InStageManager ISM;
 
-    bool live = true;
+    public bool live = true; // Enemies' scripts check this variable
     float deadTime = 1f;
 
     void Start()
@@ -47,6 +48,7 @@ public class Player : MonoBehaviour
         rb = gameObject.GetComponent<Rigidbody2D>();
         renderer = gameObject.GetComponentInChildren<SpriteRenderer>();
         animator = gameObject.GetComponentInChildren<Animator>();
+        ISM = GameObject.FindGameObjectWithTag("Managers").GetComponent<InStageManager>();
     }
 
     private void FixedUpdate()
@@ -279,63 +281,91 @@ public class Player : MonoBehaviour
 
     void Dead()
     {
-        
+        if (deadTime < 3f)
+        {
+            deadTime += Time.deltaTime;
+        }
+        else
+        {
+            ISM.returnCheckPoint();
+            rb.bodyType = RigidbodyType2D.Dynamic;
+            live = true;
+            gameObject.GetComponentInChildren<Player_body>().bodyHit = false;
+
+        }
     }
 
     void Update()
     {
         // change animation
-        animator.SetFloat("velocityY", rb.velocity.y);
 
-        if (gameObject.GetComponentInChildren<Player_feet>().feetOnPlatform && !isJumping)
+        if (!live)
         {
-            animator.SetBool("feetOnPlatform", true);
-            animator.SetBool("walk", Input.GetAxisRaw("Horizontal") != 0);
+            //TODO: set animation 'dead'
         }
         else
         {
-            animator.SetBool("feetOnPlatform", false);
-            animator.SetBool("walk", false);
-        }
+            animator.SetFloat("velocityY", rb.velocity.y);
 
-        if (Input.GetAxisRaw("Horizontal") < 0)
-        {
-            renderer.flipX = false; // see left
-        }
-        if (Input.GetAxisRaw("Horizontal") > 0)
-        {
-            renderer.flipX = true; // see right
-        }
-
-        // detect jumper (Jumper jump start)
-        if (gameObject.GetComponentInChildren<Player_feet>().feetOnJumper) {
-            gameObject.GetComponentInChildren<Player_feet>().feetOnJumper = false;
-            canJumpNum = defaultCanJumpNum;
-            canJumpNum--;
-            isJumperJump = true;
-            isJumping = true;
-            jumpTime = 0f;
-        }
-
-        // detect jump key (Jump start)
-        if (isPusherMove == 0 && !isJumperJump && Input.GetKeyDown(KeyCode.X) && canJumpNum > 0)
-        { // is not using pusher && is not using jumper && canJumpNum is positive
-            if (!gameObject.GetComponentInChildren<Player_feet>().feetOnPlatform) // jumping in air decreases canJumpNum
+            if (gameObject.GetComponentInChildren<Player_feet>().feetOnPlatform && !isJumping)
             {
-                canJumpNum--;
+                animator.SetBool("feetOnPlatform", true);
+                animator.SetBool("walk", Input.GetAxisRaw("Horizontal") != 0);
+            }
+            else
+            {
+                animator.SetBool("feetOnPlatform", false);
+                animator.SetBool("walk", false);
             }
 
-            isJumping = true;
-            isShortJump = false;
-            jumpTime = 0f;
-        }
-        jumpKeyPressed = Input.GetKey(KeyCode.X);
+            if (Input.GetAxisRaw("Horizontal") < 0)
+            {
+                renderer.flipX = false; // see left
+            }
+            if (Input.GetAxisRaw("Horizontal") > 0)
+            {
+                renderer.flipX = true; // see right
+            }
 
-        // detect shot key
-        if (Input.GetKeyDown(KeyCode.Z) && shootTime >= shootDelay)
-        {
-            Shoot = true;
-            shootTime = 0;
+            // detect jumper (Jumper jump start)
+            if (gameObject.GetComponentInChildren<Player_feet>().feetOnJumper) {
+                gameObject.GetComponentInChildren<Player_feet>().feetOnJumper = false;
+                canJumpNum = defaultCanJumpNum;
+                canJumpNum--;
+                isJumperJump = true;
+                isJumping = true;
+                jumpTime = 0f;
+            }
+
+            // detect jump key (Jump start)
+            if (isPusherMove == 0 && !isJumperJump && Input.GetKeyDown(KeyCode.X) && canJumpNum > 0)
+            { // is not using pusher && is not using jumper && canJumpNum is positive
+                if (!gameObject.GetComponentInChildren<Player_feet>().feetOnPlatform) // jumping in air decreases canJumpNum
+                {
+                    canJumpNum--;
+                }
+
+                isJumping = true;
+                isShortJump = false;
+                jumpTime = 0f;
+            }
+            jumpKeyPressed = Input.GetKey(KeyCode.X);
+
+            // detect shot key
+            if (Input.GetKeyDown(KeyCode.Z) && shootTime >= shootDelay)
+            {
+                Shoot = true;
+                shootTime = 0;
+            }
+
+            // detect dead
+            if (gameObject.GetComponentInChildren<Player_body>().bodyHit)
+            {
+                live = false;
+                deadTime = 0;
+                rb.bodyType = RigidbodyType2D.Static;
+                // TODO: set animation 'dead'
+            }
         }
     }
 
@@ -350,6 +380,34 @@ public class Player : MonoBehaviour
         {
             isPusherMove = -1;
             pusherMoveTime = 0f;
+        }
+        
+        if (collision.gameObject.tag == "CheckPoint")
+        {
+            char sp = '_';
+            string[] splited = collision.gameObject.name.Split(sp);
+            Debug.Log("Splited :" + " 0: " + splited[0] + " 1: " + splited[1] + " 2: " + splited[2]);
+            int newIndex = int.Parse(splited[2]);
+
+            if (PlayerPrefs.HasKey("CheckPoint_" + GameManager.sceneIndex.ToString()))
+            {
+                int storedIndex = PlayerPrefs.GetInt("CheckPoint_" + GameManager.sceneIndex.ToString());
+                if (storedIndex != newIndex) // 다른 체크포인트일 경우 기존 올라온 깃발을 다시 내린다.
+                {
+                    GameObject go = GameObject.Find("CheckPoint_" + GameManager.sceneIndex.ToString() + "_" + storedIndex.ToString()); // 기존 저장된 정보 찾는다.
+                    SpriteRenderer srOld = go.GetComponent<SpriteRenderer>();
+                    Sprite oldFlag = Resources.Load<Sprite>("Sprite/flag_off");
+                    srOld.sprite = oldFlag;
+                }
+            }
+
+            PlayerPrefs.SetInt("CheckPoint_" + GameManager.sceneIndex, newIndex);
+            InStageManager.StartingPos = collision.gameObject.transform.position;
+
+            /// 아래는 새 이미지로 교체.
+            SpriteRenderer srNew = collision.gameObject.GetComponent<SpriteRenderer>();
+            Sprite newFlag = Resources.Load<Sprite>("Sprite/flag_on");
+            srNew.sprite = newFlag;
         }
 
         // TODO? : coin item will be managed by GameManager

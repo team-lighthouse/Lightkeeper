@@ -27,7 +27,6 @@ public class Tree : MonoBehaviour
             if (ignoreCollision && !playerOverlap)
             {
                 Physics2D.IgnoreCollision(playerCol, GetComponent<Collider2D>(), false);
-                Debug.Log("fffff");
                 ignoreCollision = false;
             }
         }

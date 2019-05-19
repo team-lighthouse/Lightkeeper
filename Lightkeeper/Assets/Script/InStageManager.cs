@@ -88,6 +88,7 @@ public class InStageManager : MonoBehaviour
     // 체크포인트로 되돌아감.
     public void returnCheckPoint()
     {
+        Debug.Log("return");
         GameObject.FindGameObjectWithTag("Player").transform.position = StartingPos + new Vector3(0, 0.5f, 0);
     }
 

@@ -15,6 +15,7 @@ TagManager:
   - CheckPoint
   - Seed
   - Tree
+  - Managers
   layers:
   - Default
   - TransparentFX
