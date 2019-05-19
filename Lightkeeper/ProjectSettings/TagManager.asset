@@ -10,6 +10,11 @@ TagManager:
   - Pusher_toRight
   - Pusher_toLeft
   - Dirt
+  - EndPoint
+  - StartPoint
+  - CheckPoint
+  - Seed
+  - Tree
   layers:
   - Default
   - TransparentFX

@@ -14,6 +14,8 @@ public class InStageManager : MonoBehaviour
 
     public bool resetCheckPoint = false;
 
+    int treeLimit;
+    public Queue<GameObject> trees = new Queue<GameObject>();
 
     void Awake()
     {
@@ -40,6 +42,16 @@ public class InStageManager : MonoBehaviour
         }
 
         Instantiate(player, StartingPos, Quaternion.identity);
+
+        treeLimit = 3;
+    }
+
+    void Update()
+    {
+        if (trees.Count > treeLimit)
+        {
+            Destroy(trees.Dequeue());
+        }
     }
 
     void OnGUI()

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8711092222720044496}
   m_Layer: 0
   m_Name: Seed
-  m_TagString: Untagged
+  m_TagString: Seed
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -47,7 +47,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seedDirection: 0
-  tree: {fileID: 4769321185611899892, guid: a3ae256c518b1d745813c0baf323bfda, type: 3}
 --- !u!212 &4633914300719909838
 SpriteRenderer:
   m_ObjectHideFlags: 0

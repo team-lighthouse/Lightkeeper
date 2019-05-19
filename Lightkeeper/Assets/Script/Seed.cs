@@ -21,8 +21,8 @@ public class Seed : MonoBehaviour
     {
         rb.velocity = new Vector2(seedDirection * seedMoveSpeed, 0);
 
-        if (transform.position.x < player.transform.position.x - 25 ||
-            transform.position.x > player.transform.position.x + 25)
+        if (transform.position.x < player.transform.position.x - 40f || // out of screen
+            transform.position.x > player.transform.position.x + 40f)
         {
             Destroy(gameObject);
         }
@@ -31,7 +31,8 @@ public class Seed : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.layer == 15 || // Enemy
-            collision.gameObject.layer == 20) // Hard_platform
+            collision.gameObject.layer == 20 || // Hard_platform
+            collision.CompareTag("Tree"))
         {
             Destroy(gameObject);
         }
