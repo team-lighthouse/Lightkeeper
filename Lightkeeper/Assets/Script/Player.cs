@@ -7,8 +7,8 @@ public class Player : MonoBehaviour
     float moveSpeed = 9f;
     float pusherMoveTime;
     int isPusherMove = 0; // -1: toLeft, 0: none, 1: toRight
-    float pusherMoveSpeed = 60f;
-    float pusherMoveTimeLimit = 0.25f;
+    float pusherMoveSpeed = 30f;
+    float pusherMoveTimeLimit = 0.36f;
 
     float jumpSpeed = 20f;
     float jumpTime;
@@ -23,14 +23,13 @@ public class Player : MonoBehaviour
     float jumperJumpTimeLimit = 0.3f;
     bool jumpKeyPressed = false;
 
-    //float shootDelay = 0.4f;
-    //bool Shoot = false;
-    //bool shootTime;
-    
-    float fallingSpeedMax = 25f;
-
+    float shootDelay = 0.4f;
+    bool Shoot = false;
+    float shootTime;
     public GameObject seed;
 
+    float fallingSpeedMax = 25f;
+    
     Rigidbody2D rb;
     new SpriteRenderer renderer;
     public Animator animator; // Player_feet.cs check animation for avoid 'side platform landing'
@@ -86,15 +85,21 @@ public class Player : MonoBehaviour
     {
         if (isPusherMove != 0) // -1(toLeft) or 1(toRight)
         {
-            if (pusherMoveTime == 0f)
+            if (pusherMoveTime == 0)
             {
-                rb.velocity = new Vector2(pusherMoveSpeed * isPusherMove, 5f);
+                rb.velocity = new Vector2(pusherMoveSpeed * isPusherMove, 20f);
+                pusherMoveTime += Time.deltaTime;
+                return;
+            }
+            else if (pusherMoveTime < pusherMoveTimeLimit * 0.9f)
+            {
+                rb.velocity = new Vector2(pusherMoveSpeed * isPusherMove, rb.velocity.y);
                 pusherMoveTime += Time.deltaTime;
                 return;
             }
             else if (pusherMoveTime < pusherMoveTimeLimit)
             {
-                rb.velocity = new Vector2((pusherMoveSpeed - pusherMoveTime * 200f) * isPusherMove, rb.velocity.y);
+                rb.velocity = new Vector2((pusherMoveSpeed - (pusherMoveTime - (pusherMoveTimeLimit * 0.9f)) * (pusherMoveSpeed - 10f) / (pusherMoveTimeLimit * 0.1f)) * isPusherMove, rb.velocity.y);
                 pusherMoveTime += Time.deltaTime;
                 return;
             }
@@ -106,7 +111,7 @@ public class Player : MonoBehaviour
 
         if (gameObject.GetComponentInChildren<Player_feet>().feetOnIce) // move on ice
         {
-            rb.velocity = new Vector2(rb.velocity.x * 0.99f + Input.GetAxisRaw("Horizontal") * moveSpeed * 0.04f, rb.velocity.y);
+            rb.velocity = new Vector2(rb.velocity.x * 0.99f + Input.GetAxisRaw("Horizontal") * moveSpeed * 0.02f, rb.velocity.y);
             if (Input.GetAxisRaw("Horizontal") * rb.velocity.x < 0) // velocity direction and input direction is opposite
             {
                 animator.speed = 2f;
@@ -121,7 +126,40 @@ public class Player : MonoBehaviour
             animator.speed = 1f;
             if (gameObject.GetComponentInChildren<Player_feet>().feetOnPlatform) // move on platform
             {
-                rb.velocity = new Vector2(Input.GetAxisRaw("Horizontal") * moveSpeed, rb.velocity.y);
+                if (Input.GetAxisRaw("Horizontal") == 0)
+                {
+                    rb.velocity = new Vector2(0, rb.velocity.y);
+                }
+                else if (Input.GetAxisRaw("Horizontal") == 1f)
+                {
+                    if (rb.velocity.x < 0) // turn right
+                    {
+                        rb.velocity = new Vector2(0, rb.velocity.y);
+                    }
+                    else if (rb.velocity.x < moveSpeed) // accelerate to right
+                    {
+                        rb.velocity = new Vector2(rb.velocity.x + moveSpeed * 7f * Time.deltaTime, rb.velocity.y);
+                    }
+                    else // uniform move to right
+                    {
+                        rb.velocity = new Vector2(moveSpeed, rb.velocity.y);
+                    }
+                }
+                else // Input.GetAxisRaw("Horizontal") == -1f
+                {
+                    if (rb.velocity.x > 0) // turn left
+                    {
+                        rb.velocity = new Vector2(0, rb.velocity.y);
+                    }
+                    else if (rb.velocity.x > -moveSpeed) // accelerate to left
+                    {
+                        rb.velocity = new Vector2(rb.velocity.x - moveSpeed * 7f * Time.deltaTime, rb.velocity.y);
+                    }
+                    else // uniform move to left
+                    {
+                        rb.velocity = new Vector2(-moveSpeed, rb.velocity.y);
+                    }
+                }
             }
             else // move on air
             {
@@ -213,7 +251,30 @@ public class Player : MonoBehaviour
 
     void Shot()
     {
+        if (!Shoot)
+        {
+            if (shootTime < shootDelay)
+            {
+                shootTime += Time.deltaTime;
+            }
+            return;
+        }
+        else
+        {
+            Shoot = false;
 
+            GameObject newSeed = Instantiate(seed, transform.position + Vector3.down * 0.25f, Quaternion.identity);
+            if (renderer.flipX == false) // see left
+            {
+                newSeed.GetComponent<Seed>().seedDirection = -1;
+                newSeed.GetComponent<SpriteRenderer>().flipX = false;
+            }
+            else // renderer.flipX == true // see right
+            {
+                newSeed.GetComponent<Seed>().seedDirection = 1;
+                newSeed.GetComponent<SpriteRenderer>().flipX = true;
+            }
+        }
     }
 
     void Dead()
@@ -239,11 +300,11 @@ public class Player : MonoBehaviour
 
         if (Input.GetAxisRaw("Horizontal") < 0)
         {
-            renderer.flipX = false;
+            renderer.flipX = false; // see left
         }
         if (Input.GetAxisRaw("Horizontal") > 0)
         {
-            renderer.flipX = true;
+            renderer.flipX = true; // see right
         }
 
         // detect jumper (Jumper jump start)
@@ -268,8 +329,14 @@ public class Player : MonoBehaviour
             isShortJump = false;
             jumpTime = 0f;
         }
-
         jumpKeyPressed = Input.GetKey(KeyCode.X);
+
+        // detect shot key
+        if (Input.GetKeyDown(KeyCode.Z) && shootTime >= shootDelay)
+        {
+            Shoot = true;
+            shootTime = 0;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

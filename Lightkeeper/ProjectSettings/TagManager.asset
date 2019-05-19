@@ -9,6 +9,7 @@ TagManager:
   - Jumper
   - Pusher_toRight
   - Pusher_toLeft
+  - Dirt
   layers:
   - Default
   - TransparentFX
@@ -25,13 +26,13 @@ TagManager:
   - 
   - 
   - 
+  - Enemy
   - 
   - 
   - 
   - 
-  - 
-  - Dirt,Stone
-  - Wood
+  - Hard_platform
+  - Soft_platform
   - 
   - 
   - 
