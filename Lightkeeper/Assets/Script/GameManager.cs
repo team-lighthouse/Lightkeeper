@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour
     public static int sceneIndex = 0;
     bool pause = false;
 
+    int worldMapScene = 4;
+
     GameObject pauseBtn, chkPointBtn, mapBtn, resumeBtn;
 
 
@@ -22,7 +24,7 @@ public class GameManager : MonoBehaviour
         // 현재 scene의 번호를 받아온다. scene index는 build setting에서 설정 가능.
         sceneIndex = SceneManager.GetActiveScene().buildIndex;
 
-        if(sceneIndex != 0)
+        if(sceneIndex != worldMapScene)
         {
             // GameObject.Find 가 inactive gameobject를 받아오지 못해서 넣은 코드.
             pauseBtn = GameObject.Find("PauseBtn");
@@ -92,7 +94,7 @@ public class GameManager : MonoBehaviour
         resumeBtn.SetActive(false);
         pauseBtn.SetActive(false);
 
-        SceneManager.LoadScene(0, LoadSceneMode.Single);
+        SceneManager.LoadScene(worldMapScene, LoadSceneMode.Single);
 
         pause = false;
     }

@@ -408,6 +408,15 @@ public class Player : MonoBehaviour
             SpriteRenderer srNew = collision.gameObject.GetComponent<SpriteRenderer>();
             Sprite newFlag = Resources.Load<Sprite>("Sprite/flag_on");
             srNew.sprite = newFlag;
+
+            InStageManager ISM = GameObject.Find("Managers").GetComponent<InStageManager>();
+            ISM.saveCoin();
+        }
+
+        if (collision.gameObject.tag == "Coin")
+        {
+            InStageManager ISM = GameObject.Find("Managers").GetComponent<InStageManager>();
+            ISM.handleCoin(collision.gameObject);
         }
 
         // TODO? : coin item will be managed by GameManager
