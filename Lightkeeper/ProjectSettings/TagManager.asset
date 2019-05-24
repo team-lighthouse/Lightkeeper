@@ -16,6 +16,7 @@ TagManager:
   - Seed
   - Tree
   - Managers
+  - Coin
   layers:
   - Default
   - TransparentFX

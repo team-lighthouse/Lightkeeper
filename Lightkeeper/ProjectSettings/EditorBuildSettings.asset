@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/WorldMap.unity
-    guid: 356e68eab6a2c428ba8ef007427415dd
+    path: Assets/Scenes/Area_0.unity
+    guid: 35cec1e21952da64188c49d2e3c300a5
   - enabled: 1
     path: Assets/Scenes/Area_1.unity
     guid: 9189bcca5dd70a041a7e30ea569ef8e3
@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Test_area.unity
     guid: bbecbd0a41a17fb40a8ec415ad63bd6f
+  - enabled: 1
+    path: Assets/Scenes/WorldMap.unity
+    guid: 356e68eab6a2c428ba8ef007427415dd
   m_configObjects: {}
