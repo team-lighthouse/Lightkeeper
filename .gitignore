@@ -24,6 +24,10 @@ ExportedObj/
 *.pdb
 *.opendb
 
+Lightkeeper/.idea/
+Lightkeeper/.vscode/
+Lightkeeper/.vs/
+
 # Unity3D generated meta files
 *.pidb.meta
 *.pdb.meta
