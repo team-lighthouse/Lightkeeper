@@ -5,7 +5,7 @@ using UnityEngine;
 public class Item_jump : MonoBehaviour
 {
     float regenTimer;
-    float itemRegenTime = 5f;
+    float itemRegenTime = 3f;
     
     new SpriteRenderer renderer;
     BoxCollider2D bc;

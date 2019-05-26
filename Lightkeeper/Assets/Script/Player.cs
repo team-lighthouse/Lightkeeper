@@ -15,7 +15,7 @@ public class Player : MonoBehaviour
     float jumpTimeMax = 0.23f;
     float jumpTimeMin = 0.06f;
     int defaultCanJumpNum = 1;
-    public int canJumpNum; // Player_feet.cs, Jumper.cs, Item_jump.cs can change this variable
+    public int canJumpNum; // Player_feet.cs, Jumper.cs, Item_jump.cs can change this variable, can_jump.cs check this variable
     public bool isJumping = false; // Player_head.cs can change this variable
     bool isShortJump = false;
     bool isJumperJump = false;
@@ -34,9 +34,10 @@ public class Player : MonoBehaviour
     new SpriteRenderer renderer;
     public Animator animator; // Player_feet.cs check animation for avoid 'side platform landing'
     InStageManager ISM;
-
+    
     public bool live = true; // Enemies' scripts check this variable
-    float deadTime = 1f;
+    float deadTime = 0;
+    public Sprite deadSprite;
 
     void Start()
     {
@@ -182,8 +183,6 @@ public class Player : MonoBehaviour
         {
             rb.velocity = new Vector2(0, rb.velocity.y);
         }
-
-        // TODO: Side spring
     }
 
     void Jump()
@@ -281,14 +280,21 @@ public class Player : MonoBehaviour
 
     void Dead()
     {
-        if (deadTime < 3f)
+        if (deadTime < 2f)
         {
             deadTime += Time.deltaTime;
+            if (deadTime >= 1f)
+            {
+                animator.enabled = false;
+                renderer.sprite = deadSprite;
+            }
         }
-        else
+        else // respawn
         {
+            ISM.removeTrees();
             ISM.returnCheckPoint();
             rb.bodyType = RigidbodyType2D.Dynamic;
+            animator.enabled = true;
             live = true;
             gameObject.GetComponentInChildren<Player_body>().bodyHit = false;
 
@@ -297,11 +303,9 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        // change animation
-
         if (!live)
         {
-            //TODO: set animation 'dead'
+
         }
         else
         {
@@ -362,9 +366,10 @@ public class Player : MonoBehaviour
             if (gameObject.GetComponentInChildren<Player_body>().bodyHit)
             {
                 live = false;
+                animator.SetBool("walk", false);
                 deadTime = 0;
                 rb.bodyType = RigidbodyType2D.Static;
-                // TODO: set animation 'dead'
+                // after 1.5s, sprite changes to 'dead'
             }
         }
     }

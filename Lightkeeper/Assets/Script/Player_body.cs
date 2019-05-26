@@ -8,7 +8,8 @@ public class Player_body : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.layer == 15) // Enemy
+        if (collision.gameObject.layer == 15 || // Enemy
+            collision.gameObject.layer == 16) // Thorn
         {
             bodyHit = true;
         }

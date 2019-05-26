@@ -66,6 +66,7 @@ public class InStageManager : MonoBehaviour
 
     void Update()
     {
+        // Tree 개수 제한
         if (trees.Count > treeLimit)
         {
             Destroy(trees.Dequeue());
@@ -106,6 +107,7 @@ public class InStageManager : MonoBehaviour
     // 체크포인트로 되돌아감.
     public void returnCheckPoint()
     {
+        removeTrees();
         Debug.Log("return");
         GameObject.FindGameObjectWithTag("Player").transform.position = StartingPos + new Vector3(0, 0.5f, 0);
         
@@ -159,5 +161,13 @@ public class InStageManager : MonoBehaviour
         
         tempCoin.Clear();
         tempCoins.Clear();
+    }
+
+    public void removeTrees()
+    {
+        while (trees.Count > 0)
+        {
+            Destroy(trees.Dequeue());
+        }
     }
 }
