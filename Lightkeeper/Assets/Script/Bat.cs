@@ -88,6 +88,7 @@ public class Bat : MonoBehaviour
                 }
                 
                 chase = gameObject.GetComponentInChildren<chase_area>().playerDetect;
+                Debug.Log(moveFromStart);
             }
             else // chase
             {
