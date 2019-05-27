@@ -6,7 +6,6 @@ public class Bat : MonoBehaviour
 {
     public float speed;
     float timeCount = 0;
-    Vector3 endPos;
     Vector3 startPos;
     bool moveFromStart = true;
     float regenTimer = 0;
@@ -21,7 +20,6 @@ public class Bat : MonoBehaviour
     void Start()
     {
         startPos = transform.position;
-        endPos = gameObject.GetComponentInChildren<patrol_end>().endPosition;
         player = GameObject.FindGameObjectWithTag("Player");
         rb = gameObject.GetComponent<Rigidbody2D>();
         animator = gameObject.GetComponent<Animator>();
@@ -36,9 +34,10 @@ public class Bat : MonoBehaviour
             return;
         }
 
-        if (regenTimer >= 2f) // Player respawned
+        if (regenTimer >= 2f && player.GetComponent<Player>().live) // Player respawned
         {
             renderer.enabled = true;
+            rb.WakeUp();
             gameObject.GetComponentInChildren<CircleCollider2D>().enabled = true;
             gameObject.GetComponentInChildren<CapsuleCollider2D>().enabled = true;
             transform.position = startPos;
@@ -52,6 +51,7 @@ public class Bat : MonoBehaviour
         if (gameObject.GetComponentInChildren<Bat_body>().hit) // hit by seed
         {
             renderer.enabled = false;
+            rb.Sleep();
             gameObject.GetComponentInChildren<CircleCollider2D>().enabled = false;
             gameObject.GetComponentInChildren<CapsuleCollider2D>().enabled = false;
         }
@@ -72,8 +72,8 @@ public class Bat : MonoBehaviour
 
                 if (moveFromStart)
                 {
-                    rb.velocity = Vector3.Normalize(endPos - transform.position) * speed;
-                    if (gameObject.GetComponentInChildren<BoxCollider2D>().bounds.Contains(endPos))
+                    rb.velocity = Vector3.Normalize(gameObject.GetComponentInChildren<patrol_point>().endPosition - transform.position) * speed;
+                    if (gameObject.GetComponentInChildren<BoxCollider2D>().bounds.Contains(gameObject.GetComponentInChildren<patrol_point>().endPosition))
                     {
                         moveFromStart = false;
                     }

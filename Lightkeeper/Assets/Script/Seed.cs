@@ -30,7 +30,7 @@ public class Seed : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.layer == 15 || // Enemy
+        if (collision.gameObject.layer == 16 || // Enemy_body
             collision.gameObject.layer == 20 || // Hard_platform
             collision.CompareTag("Tree"))
         {

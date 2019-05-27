@@ -293,11 +293,12 @@ public class Player : MonoBehaviour
         {
             ISM.removeTrees();
             ISM.returnCheckPoint();
+            rb.gravityScale = 1;
             rb.bodyType = RigidbodyType2D.Dynamic;
             animator.enabled = true;
             live = true;
+            deadTime = 0;
             gameObject.GetComponentInChildren<Player_body>().bodyHit = false;
-
         }
     }
 
@@ -365,11 +366,13 @@ public class Player : MonoBehaviour
             // detect dead
             if (gameObject.GetComponentInChildren<Player_body>().bodyHit)
             {
+                rb.velocity = Vector2.zero;
+                rb.gravityScale = 0;
+                rb.bodyType = RigidbodyType2D.Static;
                 live = false;
                 animator.SetBool("walk", false);
                 deadTime = 0;
-                rb.bodyType = RigidbodyType2D.Static;
-                // after 1.5s, sprite changes to 'dead'
+                // after 1s, sprite changes to 'dead'
             }
         }
     }
