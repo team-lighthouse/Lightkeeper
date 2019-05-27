@@ -5,7 +5,6 @@ using UnityEngine;
 public class Bat : MonoBehaviour
 {
     public float speed;
-    float timeCount = 0;
     Vector3 startPos;
     bool moveFromStart = true;
     float regenTimer = 0;
@@ -37,11 +36,11 @@ public class Bat : MonoBehaviour
         if (regenTimer >= 2f && player.GetComponent<Player>().live) // Player respawned
         {
             renderer.enabled = true;
-            rb.WakeUp();
             gameObject.GetComponentInChildren<CircleCollider2D>().enabled = true;
             gameObject.GetComponentInChildren<CapsuleCollider2D>().enabled = true;
+            gameObject.GetComponentInChildren<BoxCollider2D>().enabled = true;
+            gameObject.GetComponentInChildren<PolygonCollider2D>().enabled = true;
             transform.position = startPos;
-            timeCount = 0;
             moveFromStart = true;
             regenTimer = 0;
             gameObject.GetComponentInChildren<chase_area>().playerDetect = false;
@@ -51,9 +50,10 @@ public class Bat : MonoBehaviour
         if (gameObject.GetComponentInChildren<Bat_body>().hit) // hit by seed
         {
             renderer.enabled = false;
-            rb.Sleep();
             gameObject.GetComponentInChildren<CircleCollider2D>().enabled = false;
             gameObject.GetComponentInChildren<CapsuleCollider2D>().enabled = false;
+            gameObject.GetComponentInChildren<BoxCollider2D>().enabled = false;
+            gameObject.GetComponentInChildren<PolygonCollider2D>().enabled = false;
         }
 
         if (!player.GetComponent<Player>().live) // Player is dead
@@ -75,7 +75,15 @@ public class Bat : MonoBehaviour
                     rb.velocity = Vector3.Normalize(gameObject.GetComponentInChildren<patrol_point>().endPosition - transform.position) * speed;
                     if (gameObject.GetComponentInChildren<BoxCollider2D>().bounds.Contains(gameObject.GetComponentInChildren<patrol_point>().endPosition))
                     {
-                        moveFromStart = false;
+                        if (Vector2.Distance(startPos, gameObject.GetComponentInChildren<patrol_point>().endPosition) < Vector2.kEpsilon)
+                        {
+                            transform.position = startPos;
+                            moveFromStart = true;
+                        }
+                        else
+                        {
+                            moveFromStart = false;
+                        }
                     }
                 }
                 else
@@ -88,7 +96,6 @@ public class Bat : MonoBehaviour
                 }
                 
                 chase = gameObject.GetComponentInChildren<chase_area>().playerDetect;
-                Debug.Log(moveFromStart);
             }
             else // chase
             {
@@ -105,16 +112,27 @@ public class Bat : MonoBehaviour
                     }
                 }
             }
-            
-            if (rb.velocity.x >= 0)
+
+
+            if (Vector2.Distance(startPos, gameObject.GetComponentInChildren<patrol_point>().endPosition) < Vector2.kEpsilon &&
+                gameObject.GetComponentInChildren<BoxCollider2D>().bounds.Contains(startPos)) // not patrol, stay position
             {
-                renderer.flipX = true;
-                gameObject.GetComponentInChildren<CapsuleCollider2D>().offset = new Vector2(0.3f, -0.05f);
+                // do nothing
             }
             else
             {
-                renderer.flipX = false;
-                gameObject.GetComponentInChildren<CapsuleCollider2D>().offset = new Vector2(-0.3f, -0.05f);
+                if (rb.velocity.x >= 0)
+                {
+                    renderer.flipX = true;
+                    gameObject.GetComponentInChildren<CapsuleCollider2D>().offset = new Vector2(0.3f, -0.05f);
+                    gameObject.GetComponentInChildren<PolygonCollider2D>().offset = new Vector2(0.35f, 0);
+                }
+                else
+                {
+                    renderer.flipX = false;
+                    gameObject.GetComponentInChildren<CapsuleCollider2D>().offset = new Vector2(-0.3f, -0.05f);
+                    gameObject.GetComponentInChildren<PolygonCollider2D>().offset = new Vector2(-0.35f, 0);
+                }
             }
         }
     }
