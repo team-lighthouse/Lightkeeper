@@ -19,6 +19,9 @@ public class InStageManager : MonoBehaviour
     public Queue<GameObject> trees = new Queue<GameObject>();
 
     List<GameObject> tempCoins = new List<GameObject>();
+    
+    bool isCleared = false;
+    public int beaconCount = 0;
 
     void Awake()
     {
@@ -44,8 +47,6 @@ public class InStageManager : MonoBehaviour
             StartingPos = GameObject.FindGameObjectWithTag("StartPoint").transform.position;
         }
 
-        Instantiate(player, StartingPos, Quaternion.identity);
-
         treeLimit = 3;
 
         if(PlayerPrefs.HasKey("Coin_"+GameManager.sceneIndex.ToString()))
@@ -61,6 +62,23 @@ public class InStageManager : MonoBehaviour
                 earnedCoin?.SetActive(false);
             }
         }
+
+        if(PlayerPrefs.HasKey("Beacon_"+GameManager.sceneIndex.ToString()))
+        {
+            beaconCount = PlayerPrefs.GetInt("Beacon_"+GameManager.sceneIndex.ToString());
+        }
+
+        if(PlayerPrefs.HasKey("Clear_"+GameManager.sceneIndex.ToString()))
+        {
+            isCleared = true;
+            StartingPos = GameObject.FindGameObjectWithTag("EndPoint").transform.position;
+
+            SpriteRenderer srNew = GameObject.FindGameObjectWithTag("Beacon").gameObject.GetComponent<SpriteRenderer>();
+            Sprite BeaconOn = Resources.Load<Sprite>("Sprite/beacon_on");
+            srNew.sprite = BeaconOn;
+        }
+
+        Instantiate(player, StartingPos, Quaternion.identity);
 
     }
 
@@ -169,5 +187,21 @@ public class InStageManager : MonoBehaviour
         {
             Destroy(trees.Dequeue());
         }
+    }
+
+    public void beaconHit()
+    {
+        beaconCount++;
+        if(beaconCount == 5)
+        {
+            clearStage();
+            PlayerPrefs.SetInt("Beacon_"+GameManager.sceneIndex.ToString(), beaconCount);
+        }
+    }
+
+    public void clearStage()
+    {
+        isCleared = true;
+        PlayerPrefs.SetInt("Clear_"+GameManager.sceneIndex.ToString(), 1);
     }
 }
