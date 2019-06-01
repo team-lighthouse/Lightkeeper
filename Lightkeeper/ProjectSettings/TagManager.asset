@@ -17,6 +17,7 @@ TagManager:
   - Tree
   - Managers
   - Coin
+  - Beacon
   layers:
   - Default
   - TransparentFX
