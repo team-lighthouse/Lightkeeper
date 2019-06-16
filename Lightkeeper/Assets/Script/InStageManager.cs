@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Linq;
+using UnityEngine.UI;
 
 /// <summary>
 /// 스테이지 내부에서 일어나는 일들을 처리하는 매니저.
@@ -23,6 +24,7 @@ public class InStageManager : MonoBehaviour
     bool isCleared = false;
     bool firstTime = false;
     public int beaconCount = 0;
+
 
     void Awake()
     {
@@ -57,11 +59,19 @@ public class InStageManager : MonoBehaviour
             // {
             //     Debug.Log("SAVED COIN INFO: " + i);
             // }
+
+            int coinIdx = 0;
+
             foreach(int i in savedCoin)
             {
                 var earnedCoin = GameObject.Find("Coin_"+GameManager.sceneIndex.ToString()+"_"+i.ToString());
                 earnedCoin?.SetActive(false);
+                coinIdx++;
             }
+
+            GameObject CoinText = GameObject.Find("CoinText");
+            coinIdx /= 2;
+            CoinText.GetComponent<Text>().text = "X " + coinIdx.ToString();
         }
 
         if(PlayerPrefs.HasKey("Beacon_"+GameManager.sceneIndex.ToString()))
@@ -153,6 +163,7 @@ public class InStageManager : MonoBehaviour
         {
             Debug.Log("RETURN COIN INFO: " + coin);
             coin.SetActive(true);
+            tempCoins.Remove(coin);
         }
     }
 
@@ -197,6 +208,17 @@ public class InStageManager : MonoBehaviour
         // }
         PlayerPrefsX.SetIntArray("Coin_"+GameManager.sceneIndex.ToString(), renewCoin.ToArray());
         
+        int coinIdx = 0;
+
+        foreach(int i in renewCoin)
+        {
+            coinIdx++;
+        }
+
+        GameObject CoinText = GameObject.Find("CoinText");
+        coinIdx /= 2;
+        CoinText.GetComponent<Text>().text = "X " + coinIdx.ToString();
+
         tempCoin.Clear();
         tempCoins.Clear();
     }
