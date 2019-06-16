@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     public static int sceneIndex = 0;
     bool pause = false;
 
-    int worldMapScene = 4;
+    int worldMapScene = 0;
 
     GameObject pauseBtn, chkPointBtn, mapBtn, resumeBtn;
 

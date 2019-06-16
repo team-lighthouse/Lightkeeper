@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Linq;
+using UnityEngine.UI;
 
 /// <summary>
 /// 스테이지 내부에서 일어나는 일들을 처리하는 매니저.
@@ -21,7 +22,11 @@ public class InStageManager : MonoBehaviour
     List<GameObject> tempCoins = new List<GameObject>();
     
     bool isCleared = false;
+    bool firstTime = false;
     public int beaconCount = 0;
+
+    GameObject ClearText, ClearCoin;
+
 
     void Awake()
     {
@@ -56,11 +61,19 @@ public class InStageManager : MonoBehaviour
             // {
             //     Debug.Log("SAVED COIN INFO: " + i);
             // }
+
+            int coinIdx = 0;
+
             foreach(int i in savedCoin)
             {
                 var earnedCoin = GameObject.Find("Coin_"+GameManager.sceneIndex.ToString()+"_"+i.ToString());
                 earnedCoin?.SetActive(false);
+                coinIdx++;
             }
+
+            GameObject CoinText = GameObject.Find("CoinText");
+            coinIdx /= 2;
+            CoinText.GetComponent<Text>().text = "X " + coinIdx.ToString();
         }
 
         if(PlayerPrefs.HasKey("Beacon_"+GameManager.sceneIndex.ToString()))
@@ -70,6 +83,11 @@ public class InStageManager : MonoBehaviour
 
         if(PlayerPrefs.HasKey("Clear_"+GameManager.sceneIndex.ToString()))
         {
+            ClearText = GameObject.Find("ClearText");
+            ClearCoin = GameObject.Find("ClearCoin");
+            ClearText.SetActive(false);
+            ClearCoin.SetActive(false);
+
             isCleared = true;
             StartingPos = GameObject.FindGameObjectWithTag("EndPoint").transform.position;
 
@@ -77,10 +95,40 @@ public class InStageManager : MonoBehaviour
             Sprite BeaconOn = Resources.Load<Sprite>("Sprite/beacon_on");
             srNew.sprite = BeaconOn;
         }
+        else
+        {
+            ClearText = GameObject.Find("ClearText");
+            ClearCoin = GameObject.Find("ClearCoin");
+            ClearText.SetActive(false);
+            ClearCoin.SetActive(false);
+        }
 
         Instantiate(player, StartingPos, Quaternion.identity);
 
+        if(GameManager.sceneIndex == 1)
+        {
+            GameObject welcomeText = GameObject.Find("WelcomeText");
+
+            if (PlayerPrefs.HasKey("CheckPoint_1"))
+            {
+                welcomeText.SetActive(false);
+            }
+            else
+            {
+                StartCoroutine(disable(welcomeText, 5.0f, false));
+            }
+        }
+
     }
+
+    IEnumerator disable(GameObject go, float waitTime, bool isCleared){ 
+        yield return new WaitForSeconds(waitTime); 
+        go.SetActive(false); 
+        if(isCleared)
+        {
+            SceneManager.LoadScene(0, LoadSceneMode.Single);
+        }
+    } 
 
     void Update()
     {
@@ -133,6 +181,7 @@ public class InStageManager : MonoBehaviour
         {
             Debug.Log("RETURN COIN INFO: " + coin);
             coin.SetActive(true);
+            tempCoins.Remove(coin);
         }
     }
 
@@ -177,6 +226,17 @@ public class InStageManager : MonoBehaviour
         // }
         PlayerPrefsX.SetIntArray("Coin_"+GameManager.sceneIndex.ToString(), renewCoin.ToArray());
         
+        int coinIdx = 0;
+
+        foreach(int i in renewCoin)
+        {
+            coinIdx++;
+        }
+
+        GameObject CoinText = GameObject.Find("CoinText");
+        coinIdx /= 2;
+        CoinText.GetComponent<Text>().text = "X " + coinIdx.ToString();
+
         tempCoin.Clear();
         tempCoins.Clear();
     }
@@ -202,6 +262,31 @@ public class InStageManager : MonoBehaviour
     public void clearStage()
     {
         isCleared = true;
+        saveCoin();
         PlayerPrefs.SetInt("Clear_"+GameManager.sceneIndex.ToString(), 1);
+        ClearText.SetActive(true);
+
+        int[] savedCoin = PlayerPrefsX.GetIntArray("Coin_"+GameManager.sceneIndex.ToString());
+            // foreach(int i in savedCoin)
+            // {
+            //     Debug.Log("SAVED COIN INFO: " + i);
+            // }
+
+            int coinIdx = 0;
+
+            foreach(int i in savedCoin)
+            {
+                coinIdx++;
+            }
+
+            int[] MaxCoin = new int[] {10, 9, 9, 10};
+
+            coinIdx /= 2;
+            ClearCoin.GetComponent<Text>().text = coinIdx.ToString() + " / " + MaxCoin[GameManager.sceneIndex - 1];
+        
+            ClearCoin.SetActive(true);
+
+
+        StartCoroutine(disable(ClearText, 3.0f, true));
     }
 }
