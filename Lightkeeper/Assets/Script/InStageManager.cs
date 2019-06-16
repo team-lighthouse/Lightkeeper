@@ -21,6 +21,7 @@ public class InStageManager : MonoBehaviour
     List<GameObject> tempCoins = new List<GameObject>();
     
     bool isCleared = false;
+    bool firstTime = false;
     public int beaconCount = 0;
 
     void Awake()
@@ -80,7 +81,26 @@ public class InStageManager : MonoBehaviour
 
         Instantiate(player, StartingPos, Quaternion.identity);
 
+        if(GameManager.sceneIndex == 1)
+        {
+            GameObject welcomeText = GameObject.Find("WelcomeText");
+
+            if (PlayerPrefs.HasKey("CheckPoint_1"))
+            {
+                welcomeText.SetActive(false);
+            }
+            else
+            {
+                StartCoroutine(disable(welcomeText, 5.0f));
+            }
+        }
+
     }
+
+    IEnumerator disable(GameObject go, float waitTime){ 
+        yield return new WaitForSeconds(waitTime); 
+        go.SetActive(false); 
+    } 
 
     void Update()
     {
