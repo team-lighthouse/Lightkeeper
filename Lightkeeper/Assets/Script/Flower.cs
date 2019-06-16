@@ -10,7 +10,7 @@ public class Flower : MonoBehaviour
     public float bulletDelay = 1f;
     GameObject player;
     float regenTimer = 0;
-    Vector2 direction;
+    public int direction; // 1: up, 2: down, 3: left, 4: right
     new SpriteRenderer renderer;
     BoxCollider2D bc;
 
@@ -18,7 +18,6 @@ public class Flower : MonoBehaviour
     {
         live = true;
         player = GameObject.FindGameObjectWithTag("Player");
-        direction = GetComponentInChildren<Transform>().transform.position - transform.position;
         renderer = gameObject.GetComponent<SpriteRenderer>();
     }
 
@@ -34,7 +33,24 @@ public class Flower : MonoBehaviour
             {
                 bulletTimer = 0;
                 GameObject newBullet = Instantiate(bullet, transform.position, Quaternion.identity);
-                newBullet.GetComponent<Bullet>().direction = this.direction;
+                switch (direction)
+                {
+                    case 1: // up
+                        newBullet.GetComponent<Bullet>().direction = new Vector2(0, 12f);
+                        break;
+                    case 2: // down
+                        newBullet.GetComponent<Bullet>().direction = new Vector2(0, -12f);
+                        break;
+                    case 3: // left
+                        newBullet.GetComponent<Bullet>().direction = new Vector2(-12f, 0);
+                        break;
+                    case 4: // right
+                        newBullet.GetComponent<Bullet>().direction = new Vector2(12f, 0);
+                        break;
+                    default: // will not run
+                        newBullet.GetComponent<Bullet>().direction = new Vector2(0, 12f);
+                        break;
+                }
             }
             else
             {

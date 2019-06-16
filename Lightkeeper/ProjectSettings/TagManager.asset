@@ -37,7 +37,7 @@ TagManager:
   - Enemy
   - Enemy_body
   - Thorn
-  - 
+  - Bullet
   - 
   - Hard_platform
   - Soft_platform

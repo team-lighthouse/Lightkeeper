@@ -11,7 +11,8 @@ public class Player_body : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.layer == 15 || // Enemy
-            collision.gameObject.layer == 17) // Thorn
+            collision.gameObject.layer == 17 || // Thorn
+            collision.gameObject.layer == 18) // Bullet
         {
             bodyHitCount = true;
         }
@@ -20,7 +21,8 @@ public class Player_body : MonoBehaviour
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.gameObject.layer == 15 || // Enemy
-            collision.gameObject.layer == 17) // Thorn
+            collision.gameObject.layer == 17 || // Thorn
+            collision.gameObject.layer == 18) // Bullet
         {
             bodyHitTimer += Time.deltaTime;
         }
@@ -35,7 +37,8 @@ public class Player_body : MonoBehaviour
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.gameObject.layer == 15 || // Enemy
-            collision.gameObject.layer == 17) // Thorn
+            collision.gameObject.layer == 17 || // Thorn
+            collision.gameObject.layer == 18) // Bullet
         {
             bodyHitCount = false;
             bodyHitTimer = 0;
