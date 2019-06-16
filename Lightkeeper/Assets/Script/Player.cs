@@ -17,8 +17,8 @@ public class Player : MonoBehaviour
     int defaultCanJumpNum = 1;
     public int canJumpNum; // Player_feet.cs, Jumper.cs, Item_jump.cs can change this variable, can_jump.cs check this variable
     public bool isJumping = false; // Player_head.cs can change this variable
-    bool isShortJump = false;
-    bool isJumperJump = false;
+    public bool isShortJump = false; // Player_head.cs can change this variable
+    public bool isJumperJump = false; // Player_head.cs can change this variable
     float jumperJumpSpeed = 30f;
     float jumperJumpTimeLimit = 0.3f;
     bool jumpKeyPressed = false;
@@ -298,6 +298,15 @@ public class Player : MonoBehaviour
             animator.enabled = true;
             live = true;
             deadTime = 0;
+
+            pusherMoveTime = pusherMoveTimeLimit;
+
+            canJumpNum = 0;
+            jumpTime = jumpTimeMax;
+            isJumping = false;
+            isJumperJump = false;
+            isShortJump = false;
+
             gameObject.GetComponentInChildren<Player_body>().bodyHit = false;
         }
     }

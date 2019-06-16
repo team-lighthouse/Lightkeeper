@@ -12,6 +12,8 @@ public class Player_head : MonoBehaviour
         {
             headTouch = true;
             gameObject.GetComponentInParent<Player>().isJumping = false;
+            gameObject.GetComponentInParent<Player>().isShortJump = false;
+            gameObject.GetComponentInParent<Player>().isJumperJump = false;
         }
     }
 
@@ -21,6 +23,8 @@ public class Player_head : MonoBehaviour
         {
             headTouch = true;
             gameObject.GetComponentInParent<Player>().isJumping = false;
+            gameObject.GetComponentInParent<Player>().isShortJump = false;
+            gameObject.GetComponentInParent<Player>().isJumperJump = false;
         }
     }
 

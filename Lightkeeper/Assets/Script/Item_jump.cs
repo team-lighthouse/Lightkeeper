@@ -37,7 +37,7 @@ public class Item_jump : MonoBehaviour
             renderer.enabled = false;
             bc.enabled = false;
             regenTimer = 0f;
-            collision.gameObject.GetComponent<Player>().canJumpNum++;
+            collision.gameObject.GetComponent<Player>().canJumpNum = 1;
         }
     }
 }
