@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 
 /// <summary>
@@ -17,7 +18,8 @@ public class GameManager : MonoBehaviour
 
     GameObject pauseBtn, chkPointBtn, mapBtn, resumeBtn;
 
-
+    GameObject background;
+    Image bgImage;
 
     void Awake()
     {
@@ -35,6 +37,25 @@ public class GameManager : MonoBehaviour
             chkPointBtn.SetActive(false);
             mapBtn.SetActive(false);
             resumeBtn.SetActive(false);
+        }
+        else
+        {
+            background = GameObject.Find("Background");
+            bgImage = background.GetComponent<Image>();
+
+            int clearedIdx = 0;
+            for (int i = 1; i <= 4; i++)
+            {
+                if(PlayerPrefs.HasKey("Clear_" + i.ToString()))
+                {
+                    clearedIdx = i;
+                }
+            }
+
+            if(clearedIdx != 0)
+            {
+                bgImage.sprite = Resources.Load<Sprite>("minimap/gamemap_1") as Sprite;
+            }
         }
     }
 
@@ -72,8 +93,22 @@ public class GameManager : MonoBehaviour
         char sp = '_';
         string[] splited = EventSystem.current.currentSelectedGameObject.name.Split(sp);
         Debug.Log("Go To Scene :" + splited[1]);
+        int clickedIdx = int.Parse(splited[1]);
 
-        SceneManager.LoadScene(int.Parse(splited[1]), LoadSceneMode.Single);
+
+        if(clickedIdx == 1)
+        {
+            SceneManager.LoadScene(1, LoadSceneMode.Single);
+        }
+        else if (PlayerPrefs.HasKey("Clear_" + (clickedIdx-1).ToString()))
+        {
+            SceneManager.LoadScene(clickedIdx, LoadSceneMode.Single);
+        }
+        else
+        {
+            Debug.Log("Previous Scene has not loaded.");
+        }
+
     }
 
     // 일시정지 기능 구현하기
