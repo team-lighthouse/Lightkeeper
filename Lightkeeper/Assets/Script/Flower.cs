@@ -8,6 +8,7 @@ public class Flower : MonoBehaviour
     public GameObject bullet;
     float bulletTimer = 0;
     public float bulletDelay = 1f;
+    public float bulletStart = 0;
     GameObject player;
     float regenTimer = 0;
     public int direction; // 1: up, 2: down, 3: left, 4: right
@@ -73,6 +74,7 @@ public class Flower : MonoBehaviour
             renderer.enabled = false;
             gameObject.GetComponentInChildren<BoxCollider2D>().enabled = false;
             gameObject.GetComponentInChildren<CapsuleCollider2D>().enabled = false;
+            bulletTimer = bulletStart;
         }
 
         if (regenTimer >= 2f && player.GetComponent<Player>().live) // Player respawned

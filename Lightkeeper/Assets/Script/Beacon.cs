@@ -5,10 +5,18 @@ using UnityEngine;
 public class Beacon : MonoBehaviour
 {
     InStageManager ISM;
+    new SpriteRenderer renderer;
+    public Sprite beaconOff;
+    public Sprite beaconOn1;
+    public Sprite beaconOn2;
+    public Sprite beaconOn3;
+    public Sprite beaconOn4;
+    public Sprite beaconOn5;
 
     void Start()
     {
         ISM = GameObject.FindGameObjectWithTag("Managers").GetComponent<InStageManager>();
+        renderer = gameObject.GetComponent<SpriteRenderer>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -16,18 +24,29 @@ public class Beacon : MonoBehaviour
         if (collision.CompareTag("Seed") && ISM.beaconCount < 5)
         {
             ISM.beaconHit();
-            if(ISM.beaconCount == 5)
+            SoundManager.instance.soundlighten();
+
+            if (ISM.beaconCount == 1)
             {
-                changeSprite();
+                renderer.sprite = beaconOn1;
+            }
+            else if (ISM.beaconCount == 2)
+            {
+                renderer.sprite = beaconOn2;
+            }
+            else if (ISM.beaconCount == 3)
+            {
+                renderer.sprite = beaconOn3;
+            }
+            else if (ISM.beaconCount == 4)
+            {
+                renderer.sprite = beaconOn4;
+            }
+            else if (ISM.beaconCount == 5)
+            {
+                renderer.sprite = beaconOn5;
             }
         }
-    }
-
-    void changeSprite()
-    {
-        SpriteRenderer srNew = gameObject.GetComponent<SpriteRenderer>();
-        Sprite BeaconOn = Resources.Load<Sprite>("Sprite/beacon_on");
-        srNew.sprite = BeaconOn;
     }
 
 }
