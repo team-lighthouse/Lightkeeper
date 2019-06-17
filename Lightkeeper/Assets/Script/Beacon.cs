@@ -16,17 +16,15 @@ public class Beacon : MonoBehaviour
         if (collision.CompareTag("Seed") && ISM.beaconCount < 5)
         {
             ISM.beaconHit();
-            if(ISM.beaconCount == 5)
-            {
-                changeSprite();
-            }
+            
+            changeSprite(ISM.beaconCount);
         }
     }
 
-    void changeSprite()
+    void changeSprite(int cnt)
     {
         SpriteRenderer srNew = gameObject.GetComponent<SpriteRenderer>();
-        Sprite BeaconOn = Resources.Load<Sprite>("Sprite/beacon_on");
+        Sprite BeaconOn = Resources.Load<Sprite>("Sprite/beacon_on_"+cnt.ToString());
         srNew.sprite = BeaconOn;
     }
 
