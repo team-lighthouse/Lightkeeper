@@ -20,6 +20,7 @@ public class Flower : MonoBehaviour
         live = true;
         player = GameObject.FindGameObjectWithTag("Player");
         renderer = gameObject.GetComponent<SpriteRenderer>();
+        bulletTimer = bulletStart;
     }
 
     void Update()
