@@ -38,4 +38,15 @@ public class Seed : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.layer == 16 || // Enemy_body
+            collision.gameObject.layer == 20 || // Hard_platform
+            collision.CompareTag("Tree") ||
+            collision.CompareTag("Beacon"))
+        {
+            Destroy(gameObject);
+        }
+    }
 }
