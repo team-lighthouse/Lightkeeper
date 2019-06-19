@@ -64,14 +64,14 @@ public class GameManager : MonoBehaviour
     /// </summary>
     void OnGUI()
     {
-        GUILayout.BeginArea(new Rect(0, 0, Screen.width, Screen.height));
-        GUILayout.BeginHorizontal();
-        GUILayout.FlexibleSpace();
+        // GUILayout.BeginArea(new Rect(0, 0, Screen.width, Screen.height));
+        // GUILayout.BeginHorizontal();
+        // GUILayout.FlexibleSpace();
 
-        GUILayout.Label("STAGE INDEX " + sceneIndex);
+        // GUILayout.Label("STAGE INDEX " + sceneIndex);
 
-        GUILayout.EndHorizontal();
-        GUILayout.EndArea();
+        // GUILayout.EndHorizontal();
+        // GUILayout.EndArea();
 
         if(pause) // 일시정지 화면
         {
