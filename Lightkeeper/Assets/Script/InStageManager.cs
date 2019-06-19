@@ -183,6 +183,20 @@ public class InStageManager : MonoBehaviour
             coin.SetActive(true);
         }
         tempCoins.Clear();
+
+        int[] savedCoin = PlayerPrefsX.GetIntArray("Coin_"+GameManager.sceneIndex.ToString());
+        List<int> saved = savedCoin.ToList();
+
+        int coinIdx = 0;
+
+        foreach(int i in saved)
+        {
+            coinIdx++;
+        }
+
+        GameObject CoinText = GameObject.Find("CoinText");
+        CoinText.GetComponent<Text>().text = "X " + coinIdx.ToString();
+
     }
 
     public void chkCheckPoint()
@@ -200,7 +214,33 @@ public class InStageManager : MonoBehaviour
 
         Debug.Log("HANDLE COIN: "+ coin);
 
+        int count = countCoin();
+
+        GameObject CoinText = GameObject.Find("CoinText");
+        CoinText.GetComponent<Text>().text = "X " + count.ToString();
+
         coin.SetActive(false);
+    }
+
+    int countCoin()
+    {
+        int count = 0;
+
+        int[] savedCoin = PlayerPrefsX.GetIntArray("Coin_"+GameManager.sceneIndex.ToString());
+        List<int> saved = savedCoin.ToList();
+
+        foreach(GameObject c in tempCoins)
+        {
+            count++;
+            Debug.Log("Temp coin count" + c);
+        }
+
+        foreach(int i in saved)
+        {
+            count++;
+        }
+
+        return count;
     }
 
     public void saveCoin()
