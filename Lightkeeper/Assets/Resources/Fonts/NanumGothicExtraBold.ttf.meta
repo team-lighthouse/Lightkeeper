@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 4bcb483695d62454095d23ebb048ead4
+guid: 9d8a300930a0b49b0b8d088c73836546
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -8,11 +8,11 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: NanumBarunGothic
+  fontName: NanumGothic
   fontNames:
-  - NanumBarunGothic
+  - NanumGothic
   fallbackFontReferences:
-  - {fileID: 12800000, guid: 262581231609d409581e720b65078e4a, type: 3}
+  - {fileID: 12800000, guid: 617a0ac17145c43d29745c538288921b, type: 3}
   customCharacters: 
   fontRenderingMode: 0
   ascentCalculationMode: 1
