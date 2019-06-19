@@ -257,6 +257,9 @@ public class InStageManager : MonoBehaviour
     public void beaconHit()
     {
         beaconCount++;
+        SpriteRenderer srNew = GameObject.FindGameObjectWithTag("Beacon").gameObject.GetComponent<SpriteRenderer>();
+        Sprite BeaconOn = Resources.Load<Sprite>("Sprite/beacon_on_"+beaconCount.ToString());
+        srNew.sprite = BeaconOn;
         if(beaconCount == 5)
         {
             clearStage();
