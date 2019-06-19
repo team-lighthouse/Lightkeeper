@@ -425,6 +425,7 @@ public class Player : MonoBehaviour
                 else
                 {
                     ISM.saveCoin();
+                    SoundManager.instance.soundSave();
                     return;
                 }
             }
