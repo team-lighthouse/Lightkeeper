@@ -181,8 +181,8 @@ public class InStageManager : MonoBehaviour
         {
             Debug.Log("RETURN COIN INFO: " + coin);
             coin.SetActive(true);
-            tempCoins.Remove(coin);
         }
+        tempCoins.Clear();
     }
 
     public void chkCheckPoint()
@@ -192,7 +192,13 @@ public class InStageManager : MonoBehaviour
 
     public void handleCoin(GameObject coin)
     {
+        foreach (GameObject go in tempCoins)
+        {
+            if(go == coin) {return;}
+        }
         tempCoins.Add(coin);
+
+        Debug.Log("HANDLE COIN: "+ coin);
 
         coin.SetActive(false);
     }
@@ -234,7 +240,6 @@ public class InStageManager : MonoBehaviour
         }
 
         GameObject CoinText = GameObject.Find("CoinText");
-        coinIdx /= 2;
         CoinText.GetComponent<Text>().text = "X " + coinIdx.ToString();
 
         tempCoin.Clear();
@@ -281,7 +286,6 @@ public class InStageManager : MonoBehaviour
 
             int[] MaxCoin = new int[] {10, 9, 9, 10};
 
-            coinIdx /= 2;
             ClearCoin.GetComponent<Text>().text = coinIdx.ToString() + " / " + MaxCoin[GameManager.sceneIndex - 1];
         
             ClearCoin.SetActive(true);

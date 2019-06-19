@@ -403,18 +403,24 @@ public class Player : MonoBehaviour
         {
             char sp = '_';
             string[] splited = collision.gameObject.name.Split(sp);
-            Debug.Log("Splited :" + " 0: " + splited[0] + " 1: " + splited[1] + " 2: " + splited[2]);
             int newIndex = int.Parse(splited[2]);
+            InStageManager ISM = GameObject.Find("Managers").GetComponent<InStageManager>();
 
             if (PlayerPrefs.HasKey("CheckPoint_" + GameManager.sceneIndex.ToString()))
             {
                 int storedIndex = PlayerPrefs.GetInt("CheckPoint_" + GameManager.sceneIndex.ToString());
                 if (storedIndex != newIndex) // 다른 체크포인트일 경우 기존 올라온 깃발을 다시 내린다.
                 {
+                    Debug.Log("Check Point Renewed :" + " 0: " + splited[0] + " 1: " + splited[1] + " 2: " + splited[2]);
                     GameObject go = GameObject.Find("CheckPoint_" + GameManager.sceneIndex.ToString() + "_" + storedIndex.ToString()); // 기존 저장된 정보 찾는다.
                     SpriteRenderer srOld = go.GetComponent<SpriteRenderer>();
                     Sprite oldFlag = Resources.Load<Sprite>("Sprite/flag_off");
                     srOld.sprite = oldFlag;
+                }
+                else
+                {
+                    ISM.saveCoin();
+                    return;
                 }
             }
 
@@ -425,8 +431,7 @@ public class Player : MonoBehaviour
             SpriteRenderer srNew = collision.gameObject.GetComponent<SpriteRenderer>();
             Sprite newFlag = Resources.Load<Sprite>("Sprite/flag_on");
             srNew.sprite = newFlag;
-
-            InStageManager ISM = GameObject.Find("Managers").GetComponent<InStageManager>();
+            
             ISM.saveCoin();
         }
 
