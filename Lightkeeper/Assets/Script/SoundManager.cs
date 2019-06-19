@@ -14,6 +14,8 @@ public class SoundManager : MonoBehaviour
     public AudioClip shoot;
     public AudioClip spring;
     public AudioClip tree;
+    public AudioClip dead;
+    public AudioClip save;
 
     public static SoundManager instance;
 
@@ -35,38 +37,48 @@ public class SoundManager : MonoBehaviour
         
     }
 
-    public void soundCarrot()
+    public void soundCarrot() // Player.cs - OnTriggerEnter2D
     {
         myAudio.PlayOneShot(carrot);
     }
 
-    public void soundJump()
+    public void soundJump() // Player.cs - Update
     {
         myAudio.PlayOneShot(jump);
     }
 
-    public void soundlighten()
+    public void soundlighten() // Beacon.cs
     {
         myAudio.PlayOneShot(lighten);
     }
 
-    public void soundMonsterDeath()
+    public void soundMonsterDeath() // Bat_body.cs, Flower_body.cs
     {
         myAudio.PlayOneShot(monster_death);
     }
 
-    public void soundShoot()
+    public void soundShoot() // Player.cs - Shot
     {
         myAudio.PlayOneShot(shoot);
     }
 
-    public void soundSpring()
+    public void soundSpring() // Player.cs - Move, Update
     {
         myAudio.PlayOneShot(spring);
     }
 
-    public void soundTree()
+    public void soundTree() // Dirt.cs
     {
         myAudio.PlayOneShot(tree);
+    }
+
+    public void soundDead() // Player.cs
+    {
+        myAudio.PlayOneShot(dead);
+    }
+
+    public void soundSave()
+    {
+        myAudio.PlayOneShot(save);
     }
 }

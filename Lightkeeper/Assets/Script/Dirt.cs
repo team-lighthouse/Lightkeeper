@@ -60,6 +60,7 @@ public class Dirt : MonoBehaviour
             }
 
             Instantiate(tree, new Vector3(tileOnTrigger.x + 0.5f - 2.5f * seedDirection, seedPosY, 0), Quaternion.identity);
+            SoundManager.instance.soundTree();
         }
     }
 }

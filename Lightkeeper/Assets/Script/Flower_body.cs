@@ -11,6 +11,7 @@ public class Flower_body : MonoBehaviour
         if (collision.CompareTag("Seed"))
         {
             hit = true;
+            SoundManager.instance.soundMonsterDeath();
         }
     }
 }

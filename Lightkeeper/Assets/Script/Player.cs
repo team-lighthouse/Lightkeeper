@@ -92,6 +92,7 @@ public class Player : MonoBehaviour
             {
                 rb.velocity = new Vector2(pusherMoveSpeed * isPusherMove, 20f);
                 pusherMoveTime += Time.deltaTime;
+                SoundManager.instance.soundSpring();
                 return;
             }
             else if (pusherMoveTime < pusherMoveTimeLimit * 0.9f)
@@ -265,6 +266,7 @@ public class Player : MonoBehaviour
             Shoot = false;
 
             GameObject newSeed = Instantiate(seed, transform.position + Vector3.down * 0.25f, Quaternion.identity);
+            SoundManager.instance.soundShoot();
             if (renderer.flipX == false) // see left
             {
                 newSeed.GetComponent<Seed>().seedDirection = -1;
@@ -349,6 +351,7 @@ public class Player : MonoBehaviour
                 isJumperJump = true;
                 isJumping = true;
                 jumpTime = 0f;
+                SoundManager.instance.soundSpring();
             }
 
             // detect jump key (Jump start)
@@ -362,6 +365,7 @@ public class Player : MonoBehaviour
                 isJumping = true;
                 isShortJump = false;
                 jumpTime = 0f;
+                SoundManager.instance.soundJump();
             }
             jumpKeyPressed = Input.GetKey(KeyCode.X);
 
@@ -381,6 +385,7 @@ public class Player : MonoBehaviour
                 live = false;
                 animator.SetBool("walk", false);
                 deadTime = 0;
+                SoundManager.instance.soundDead();
                 // after 1s, sprite changes to 'dead'
             }
         }
@@ -433,12 +438,14 @@ public class Player : MonoBehaviour
             srNew.sprite = newFlag;
             
             ISM.saveCoin();
+            SoundManager.instance.soundSave();
         }
 
         if (collision.gameObject.tag == "Coin")
         {
             InStageManager ISM = GameObject.Find("Managers").GetComponent<InStageManager>();
             ISM.handleCoin(collision.gameObject);
+            SoundManager.instance.soundCarrot();
         }
 
         // TODO? : coin item will be managed by GameManager
