@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour
 
             if(clearedIdx != 0)
             {
-                bgImage.sprite = Resources.Load<Sprite>("minimap/gamemap_1") as Sprite;
+                bgImage.sprite = Resources.Load<Sprite>("minimap/gamemap_"+clearedIdx.ToString()) as Sprite;
             }
         }
     }
@@ -157,6 +157,12 @@ public class GameManager : MonoBehaviour
         pauseBtn.SetActive(true);
 
         pause = false;
+    }
+
+    public void ResetBtn()
+    {
+        PlayerPrefs.DeleteAll();
+        SceneManager.LoadScene(0, LoadSceneMode.Single);
     }
     
 }
